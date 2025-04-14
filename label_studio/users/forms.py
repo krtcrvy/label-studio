@@ -66,7 +66,7 @@ class UserSignupForm(forms.Form):
         error_messages={'required': PASS_LENGTH_ERR},
         widget=forms.TextInput(attrs={'type': 'password'}),
     )
-    allow_newsletters = forms.BooleanField(required=False)
+    allow_newsletters = forms.BooleanField(required=False, initial=False)
     how_find_us = forms.CharField(required=False)
     elaborate = forms.CharField(required=False)
 

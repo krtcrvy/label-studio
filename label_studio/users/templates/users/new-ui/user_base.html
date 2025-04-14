@@ -1,23 +1,28 @@
-{% extends 'simple.html' %}
-{% load i18n %}
-{% load static %}
-{% load filters %}
-
-
+{% extends 'simple.html' %} {% load i18n %} {% load static %} {% load filters %}
 {% block head %}
-<link rel="stylesheet" href="{{ settings.HOSTNAME }}{% static 'css/fonts.hellix.css' %}"/>
-<link rel="stylesheet" href="{{ settings.HOSTNAME }}{% static 'css/login.css' %}"/>
+<link
+  rel="stylesheet"
+  href="{{ settings.HOSTNAME }}{% static 'css/fonts.hellix.css' %}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ settings.HOSTNAME }}{% static 'css/login.css' %}"
+/>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129877673-1" nonce="{{request.csp_nonce}}"></script>
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=UA-129877673-1"
+  nonce="{{request.csp_nonce}}"
+></script>
 <script nonce="{{request.csp_nonce}}">
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-129877673-1');
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", "UA-129877673-1");
 </script>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <script nonce="{{request.csp_nonce}}">
   window.APP_SETTINGS = window.APP_SETTINGS ?? {};
   window.APP_SETTINGS.collect_analytics = {{ settings.COLLECT_ANALYTICS|yesno:"true,false" }};
@@ -58,11 +63,11 @@ gtag('config', 'UA-129877673-1');
 <script nonce="{{request.csp_nonce}}">
   const gaClientIdTrackingIframe = (event) => {
     if (!window.APP_SETTINGS?.collect_analytics) return;
-    
+
     const iframe = document.createElement("iframe");
     window.addEventListener("message", (message) => {
-      if(message.source === iframe.contentWindow && message.data.gaClientId) {
-        sessionStorage.setItem('ls_gaclient_id', message.data.gaClientId);
+      if (message.source === iframe.contentWindow && message.data.gaClientId) {
+        sessionStorage.setItem("ls_gaclient_id", message.data.gaClientId);
       }
     });
     const origin = window.location.origin;
@@ -70,25 +75,30 @@ gtag('config', 'UA-129877673-1');
     iframe.style.display = "none";
     iframe.style.visibility = "hidden";
     document.body.appendChild(iframe);
-  }
+  };
 </script>
 
 <div class="login_page_new_ui">
   <div class="left">
-    <img src="{{ settings.HOSTNAME }}{% static 'icons/logo-black.svg' %}" height="64"  alt="Label Studio Logo"/>
+    <img
+      src="{{ settings.HOSTNAME }}{% static 'icons/logo-black.svg' %}"
+      height="64"
+      alt="Label Studio Logo"
+    />
     <h3>A full-fledged open source solution for data labeling</h3>
 
     {% include 'users/new-ui/user_tips.html' %}
 
     <div class="logo_humansignal">
       Brought to you by
-      <img src="{{ settings.HOSTNAME }}{% static 'images/human_signal_logo.svg' %}" height="22"  alt="Human Signal Logo"/>
+      <img
+        src="{{ settings.HOSTNAME }}{% static 'images/human_signal_logo.svg' %}"
+        height="22"
+        alt="Human Signal Logo"
+      />
     </div>
   </div>
-  <div class="right">
-    {% block user_content %}
-  </div>
+  <div class="right">{% block user_content %}</div>
 </div>
 
-  {% endblock %}
-{% endblock %}
+{% endblock %} {% endblock %}

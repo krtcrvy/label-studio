@@ -43,7 +43,7 @@
           </ul>
         {% endif %}
       </div>
-      <div class="input-wrapper">
+      <div class="input-wrapper" style="display: none">
         <label>How did you hear about Label Studio?</label>
         <select class="lsf-select-ls" name="how_find_us" id="how_find_us">
           <option disabled value="" {% if not form.data.how_find_us %}selected{% endif %}>Select an option</option>
@@ -57,11 +57,9 @@
         <input class="lsf-input-ls" name="elaborate" id="elaborate" {% if user_form.data.how_find_us == elaborate %}value="{{ user_form.data.elaborate }}"{% endif %}>
         </select>
       </div>
-      <div class="form-group">
-        <input name="allow_newsletters" id="allow_newsletters" type="hidden" value="{% if user_form.data.allow_newsletters == 'false' %}false{% else %}true{% endif %}">
-        <input name="allow_newsletters_visual" id="allow_newsletters_visual" class="lsf-checkbox-ls"
-                type="checkbox" style="width: auto" {% if user_form.data.allow_newsletters == 'false' %}{% else %}checked="checked{% endif %}"
-                onchange="document.getElementById('allow_newsletters').value=document.getElementById('allow_newsletters_visual').checked">
+      <div class="form-group" style="display: none;">
+        <input name="allow_newsletters" id="allow_newsletters" type="hidden" value="{% if user_form.data.allow_newsletters == 'true' %}true{% else %}false{% endif %}">
+        <input name="allow_newsletters_visual" id="allow_newsletters_visual" class="lsf-checkbox-ls" type="checkbox" style="width: auto" {% if user_form.data.allow_newsletters == 'true' %}checked="checked"{% endif %} onchange="document.getElementById('allow_newsletters').value=document.getElementById('allow_newsletters_visual').checked">
         <label for="allow_newsletters_visual" style="display: inline-block; cursor: pointer;">
           Get the latest news from Heidi
           <img src="{{ settings.HOSTNAME }}{% static 'images/heidi.png' %}" alt="Heidi"
