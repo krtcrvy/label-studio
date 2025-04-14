@@ -17,12 +17,12 @@ body {
   --sand_100: #f9f8f6;
   --sand_0: #fdfdfc;
 
-  --grape_0: #f0f3fe;
-  --grape_100: #d4dbfb;
-  --grape_500: #566fcf;
-  --grape_600: #576cc1;
-  --grape_700: #4c5fa9;
-  --grape_800: #37447a;
+  --grape_0: #e6fcf4;
+  --grape_100: #b2f5dc;
+  --grape_500: #15e194;
+  --grape_600: #13c684;
+  --grape_700: #10a870;
+  --grape_800: #0c7b52;
 
   --kale_0: #f4f9f9;
   --kale_400: #57b7ab;
@@ -47,7 +47,7 @@ body {
   --red_7: #cf1322;
   --red_10: #5c0011;
 
-  --primary_link: #566fcf;
+  --primary_link: #1ec9a3;
 
   overflow-x: unset !important;
 }

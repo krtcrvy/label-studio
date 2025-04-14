@@ -5,7 +5,22 @@ import { FormSubmissionContext } from "../Form/FormContext";
 import "./Button.scss";
 
 export const Button = React.forwardRef(
-  ({ children, type, extra, className, rawClassName, size, waiting, icon, tag, look, ...rest }, ref) => {
+  (
+    {
+      children,
+      type,
+      extra,
+      className,
+      rawClassName,
+      size,
+      waiting,
+      icon,
+      tag,
+      look,
+      ...rest
+    },
+    ref
+  ) => {
     const finalTag = tag ?? (rest.href ? "a" : "button");
 
     const mods = {
@@ -14,7 +29,7 @@ export const Button = React.forwardRef(
       type,
       look: look ?? [],
       withIcon: !!icon,
-      withExtra: !!extra,
+      withExtra: !!extra
     };
 
     const formSubmitting = React.useContext(FormSubmissionContext);
@@ -38,9 +53,19 @@ export const Button = React.forwardRef(
 
       switch (size) {
         case "small":
-          return React.cloneElement(icon, { ...icon.props, size: 12, width: 12, height: 12 });
+          return React.cloneElement(icon, {
+            ...icon.props,
+            size: 12,
+            width: 12,
+            height: 12
+          });
         case "compact":
-          return React.cloneElement(icon, { ...icon.props, size: 14, width: 14, height: 14 });
+          return React.cloneElement(icon, {
+            ...icon.props,
+            size: 14,
+            width: 14,
+            height: 14
+          });
         default:
           return icon;
       }
@@ -68,7 +93,7 @@ export const Button = React.forwardRef(
         </>
       </Block>
     );
-  },
+  }
 );
 Button.displayName = "Button";
 

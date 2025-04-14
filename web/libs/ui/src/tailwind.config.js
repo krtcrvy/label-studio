@@ -1,4 +1,4 @@
-import tokens from "./tokens/tokens";
+import customTokens from "./tokens/custom-tokens";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
     "./apps/**/*.{js,jsx,ts,tsx}",
     "./libs/ui/src/**/*.{js,jsx,ts,tsx}",
     "./libs/core/src/**/*.{js,jsx,ts,tsx}",
-    "./libs/storybook/**/*.{js,jsx,ts,tsx}",
+    "./libs/storybook/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
     extend: {
@@ -42,47 +42,47 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          foreground: "hsl(var(--primary-foreground))"
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          foreground: "hsl(var(--secondary-foreground))"
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          foreground: "hsl(var(--destructive-foreground))"
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          foreground: "hsl(var(--muted-foreground))"
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          foreground: "hsl(var(--accent-foreground))"
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          foreground: "hsl(var(--popover-foreground))"
         },
         card: {
           DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          foreground: "hsl(var(--card-foreground))"
         },
 
         // Add all colors from tokens
-        ...tokens.colors,
+        ...customTokens.colors
       },
       fontSize: {
         // Add all font sizes from tokens
-        ...tokens.typography.fontSize,
+        ...customTokens.typography.fontSize
       },
       lineHeight: {
         // Add all line heights from tokens
-        ...tokens.typography.lineHeight,
+        ...customTokens.typography.lineHeight
       },
       letterSpacing: {
         // Add all letter spacings from tokens
-        ...tokens.typography.letterSpacing,
+        ...customTokens.typography.letterSpacing
       },
       spacing: {
         4.5: "1.125rem",
@@ -131,7 +131,7 @@ module.exports = {
         90: "22.5rem",
 
         // Add all spacing from tokens
-        ...tokens.spacing,
+        ...customTokens.spacing
       },
       maxWidth: {
         "c-1390": "86.875rem",
@@ -139,15 +139,15 @@ module.exports = {
         "c-1280": "80rem",
         "c-1235": "77.188rem",
         "c-1154": "72.125rem",
-        "c-1016": "63.5rem",
+        "c-1016": "63.5rem"
       },
       zIndex: {
         99999: "99999",
         999: "999",
-        1: "1",
+        1: "1"
       },
       opacity: {
-        65: ".65",
+        65: ".65"
       },
       transitionProperty: { width: "width" },
       boxShadow: {
@@ -164,7 +164,7 @@ module.exports = {
         "solid-11": "0px 6px 20px rgba(45, 74, 170, 0.05)",
         "solid-12": "0px 2px 10px rgba(0, 0, 0, 0.05)",
         "solid-13": "0px 2px 19px rgba(0, 0, 0, 0.05)",
-        "border-1": "inset 0 0 0 1px rgba(0,0,0,1)",
+        "border-1": "inset 0 0 0 1px rgba(0,0,0,1)"
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -172,31 +172,31 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
 
         // Add all border radii from tokens
-        ...tokens.cornerRadius,
+        ...customTokens.cornerRadius
       },
       backgroundPosition: {
-        "shimmer-start": "left -2em top 0",
+        "shimmer-start": "left -2em top 0"
       },
       backgroundSize: {
-        "shimmer-size": "2em 100%",
+        "shimmer-size": "2em 100%"
       },
       keyframes: {
         line: {
           "0%, 100%": { transform: "translateY(100%)" },
-          "50%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(0)" }
         },
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "var(--radix-accordion-content-height)" }
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: "0" }
         },
         shimmer: {
           from: { "background-position": "left -2em top 0" },
-          to: { "background-position": "right -2em top 0" },
-        },
+          to: { "background-position": "right -2em top 0" }
+        }
       },
       animation: {
         line1: "line 3s linear infinite",
@@ -204,12 +204,12 @@ module.exports = {
         line3: "line 9s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        shimmer: "shimmer 1.3s ease infinite",
-      },
-    },
+        shimmer: "shimmer 1.3s ease infinite"
+      }
+    }
   },
   corePlugins: {
-    preflight: true,
+    preflight: true
   },
-  plugins: [],
+  plugins: []
 };

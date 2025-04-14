@@ -152,7 +152,7 @@ export const Menubar = ({
               className={`${menubarClass.elem("trigger")} main-menu-trigger`}
             >
               <img
-                src={absoluteURL("/static/icons/logo.png")}
+                src={absoluteURL("/static/icons/logo.svg")}
                 alt="Label Studio Logo"
                 style={{ height: "2rem" }}
               />

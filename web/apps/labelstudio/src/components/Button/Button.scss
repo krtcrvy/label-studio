@@ -2,7 +2,8 @@
   --button-color: var(--grape_500);
   --button-background-color: var(--sand_0);
   --button-background-image: none;
-  --button-shadow: inset 0px -1px 0px rgb(0 0 0 / 10%), inset 0px 0px 0px 1px rgb(0 0 0 / 15%);
+  --button-shadow: inset 0px -1px 0px rgb(0 0 0 / 10%),
+    inset 0px 0px 0px 1px rgb(0 0 0 / 15%);
   --button-content-align: center;
   --button-content-justify: center;
   --button-events: all;
@@ -56,7 +57,12 @@
   &:active {
     color: var(--button-color);
 
-    --button-background-image: linear-gradient(0deg, rgb(18 17 13 / 2%), rgb(18 17 13 / 2%)), var(--sand_0);
+    --button-background-image: linear-gradient(
+        0deg,
+        rgb(18 17 13 / 2%),
+        rgb(18 17 13 / 2%)
+      ),
+      var(--sand_0);
   }
 
   &:focus {
@@ -137,7 +143,6 @@
     &_link {
       --button-color: var(--primary_link);
     }
-
   }
 
   &_look {

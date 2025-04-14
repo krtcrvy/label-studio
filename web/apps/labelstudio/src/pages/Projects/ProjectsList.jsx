@@ -1,20 +1,31 @@
+import {
+  IconCheck,
+  IconEllipsis,
+  IconMinus,
+  IconSparks
+} from "@humansignal/icons";
+import { Userpic } from "@humansignal/ui";
 import chr from "chroma-js";
 import { format } from "date-fns";
 import { useMemo } from "react";
 import { NavLink } from "react-router-dom";
-import { IconCheck, IconEllipsis, IconMinus, IconSparks } from "@humansignal/icons";
-import { Userpic } from "@humansignal/ui";
 import { Button, Dropdown, Menu, Pagination } from "../../components";
 import { Block, Elem } from "../../utils/bem";
 import { absoluteURL } from "../../utils/helpers";
 
 const DEFAULT_CARD_COLORS = ["#FFFFFF", "#FDFDFC"];
 
-export const ProjectsList = ({ projects, currentPage, totalItems, loadNextPage, pageSize }) => {
+export const ProjectsList = ({
+  projects,
+  currentPage,
+  totalItems,
+  loadNextPage,
+  pageSize
+}) => {
   return (
     <>
       <Elem name="list">
-        {projects.map((project) => (
+        {projects.map(project => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </Elem>
@@ -37,9 +48,13 @@ export const ProjectsList = ({ projects, currentPage, totalItems, loadNextPage, 
 export const EmptyProjectsList = ({ openModal }) => {
   return (
     <Block name="empty-projects-page">
-      <Elem name="heidi" tag="img" src={absoluteURL("/static/images/opossum_looking.png")} />
+      <Elem
+        name="heidi"
+        tag="img"
+        src={absoluteURL("/static/icons/logo.svg")}
+      />
       <Elem name="header" tag="h1">
-        Heidi doesn’t see any projects here!
+        You don’t have any projects yet!
       </Elem>
       <p>Create one and start labeling your data.</p>
       <Elem name="action" tag={Button} onClick={openModal} look="primary">
@@ -58,21 +73,32 @@ const ProjectCard = ({ project }) => {
     return color
       ? {
           "--header-color": color,
-          "--background-color": chr(color).alpha(0.2).css(),
+          "--background-color": chr(color)
+            .alpha(0.2)
+            .css()
         }
       : {};
   }, [color]);
 
   return (
-    <Elem tag={NavLink} name="link" to={`/projects/${project.id}/data`} data-external>
-      <Block name="project-card" mod={{ colored: !!color }} style={projectColors}>
+    <Elem
+      tag={NavLink}
+      name="link"
+      to={`/projects/${project.id}/data`}
+      data-external
+    >
+      <Block
+        name="project-card"
+        mod={{ colored: !!color }}
+        style={projectColors}
+      >
         <Elem name="header">
           <Elem name="title">
             <Elem name="title-text">{project.title ?? "New project"}</Elem>
 
             <Elem
               name="menu"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 e.preventDefault();
               }}
@@ -80,8 +106,12 @@ const ProjectCard = ({ project }) => {
               <Dropdown.Trigger
                 content={
                   <Menu contextual>
-                    <Menu.Item href={`/projects/${project.id}/settings`}>Settings</Menu.Item>
-                    <Menu.Item href={`/projects/${project.id}/data?labeling=1`}>Label</Menu.Item>
+                    <Menu.Item href={`/projects/${project.id}/settings`}>
+                      Settings
+                    </Menu.Item>
+                    <Menu.Item href={`/projects/${project.id}/data?labeling=1`}>
+                      Label
+                    </Menu.Item>
                   </Menu>
                 }
               >
@@ -113,7 +143,9 @@ const ProjectCard = ({ project }) => {
         </Elem>
         <Elem name="description">{project.description}</Elem>
         <Elem name="info">
-          <Elem name="created-date">{format(new Date(project.created_at), "dd MMM ’yy, HH:mm")}</Elem>
+          <Elem name="created-date">
+            {format(new Date(project.created_at), "dd MMM ’yy, HH:mm")}
+          </Elem>
           <Elem name="created-by">
             <Userpic src="#" user={project.created_by} showUsername />
           </Elem>

@@ -3,9 +3,11 @@
  */
 
 // Import design tokens
-@import './tokens/tokens';
-@import './tokens/typography';
-@import './tokens/colors';
-@import './tokens/layout';
+// @import "./tokens/tokens";
+@import "./tokens/custom-tokens";
+@import "./tokens/typography";
+@import "./tokens/colors";
+@import "./tokens/layout";
 
 // Additional global styles can be added here
+@import "./tokens/custom-colors";
