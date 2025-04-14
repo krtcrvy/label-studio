@@ -1,40 +1,44 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { StaticContent } from "../../app/StaticContent/StaticContent";
+import { pages } from "@humansignal/core";
 import {
-  IconBook,
+  IconDoor,
   IconFolder,
   IconPersonInCircle,
   IconPin,
-  IconTerminal,
-  IconDoor,
-  IconGithub,
-  IconSettings,
-  IconSlack,
+  IconSettings
 } from "@humansignal/icons";
-import { Userpic } from "@humansignal/ui";
+import { IconHome, Userpic } from "@humansignal/ui";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
+import { StaticContent } from "../../app/StaticContent/StaticContent";
 import { useConfig } from "../../providers/ConfigProvider";
-import { useContextComponent, useFixedLocation } from "../../providers/RoutesProvider";
 import { useCurrentUser } from "../../providers/CurrentUser";
+import {
+  useContextComponent,
+  useFixedLocation
+} from "../../providers/RoutesProvider";
 import { cn } from "../../utils/bem";
+import { FF_HOMEPAGE, isFF } from "../../utils/feature-flags";
 import { absoluteURL, isDefined } from "../../utils/helpers";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { Dropdown } from "../Dropdown/Dropdown";
 import { Hamburger } from "../Hamburger/Hamburger";
 import { Menu } from "../Menu/Menu";
-import { VersionNotifier, VersionProvider } from "../VersionNotifier/VersionNotifier";
+import { VersionProvider } from "../VersionNotifier/VersionNotifier";
 import "./Menubar.scss";
 import "./MenuContent.scss";
 import "./MenuSidebar.scss";
-import { FF_HOMEPAGE } from "../../utils/feature-flags";
-import { IconHome } from "@humansignal/ui";
-import { pages } from "@humansignal/core";
-import { isFF } from "../../utils/feature-flags";
 
 export const MenubarContext = createContext();
 
 const LeftContextMenu = ({ className }) => (
   <StaticContent id="context-menu-left" className={className}>
-    {(template) => <Breadcrumbs fromTemplate={template} />}
+    {template => <Breadcrumbs fromTemplate={template} />}
   </StaticContent>
 );
 
@@ -50,7 +54,14 @@ const RightContextMenu = ({ className, ...props }) => {
   );
 };
 
-export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSidebarToggle, onSidebarPin }) => {
+export const Menubar = ({
+  enabled,
+  defaultOpened,
+  defaultPinned,
+  children,
+  onSidebarToggle,
+  onSidebarPin
+}) => {
   const menuDropdownRef = useRef();
   const useMenuRef = useRef();
   const { user, fetch, isInProgress } = useCurrentUser();
@@ -61,7 +72,7 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
   const [sidebarPinned, setSidebarPinned] = useState(defaultPinned ?? false);
   const [PageContext, setPageContext] = useState({
     Component: null,
-    props: {},
+    props: {}
   });
 
   const menubarClass = cn("menu-header");
@@ -72,7 +83,7 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
   const showNewsletterDot = !isDefined(user?.allow_newsletters);
 
   const sidebarPin = useCallback(
-    (e) => {
+    e => {
       e.preventDefault();
 
       const newState = !sidebarPinned;
@@ -80,17 +91,17 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
       setSidebarPinned(newState);
       onSidebarPin?.(newState);
     },
-    [sidebarPinned],
+    [sidebarPinned]
   );
 
   const sidebarToggle = useCallback(
-    (visible) => {
+    visible => {
       const newState = visible;
 
       setSidebarOpened(newState);
       onSidebarToggle?.(newState);
     },
-    [sidebarOpened],
+    [sidebarOpened]
   );
 
   const providerValue = useMemo(
@@ -101,7 +112,7 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
         setTimeout(() => {
           setPageContext({
             ...PageContext,
-            Component: ctx,
+            Component: ctx
           });
         });
       },
@@ -110,16 +121,16 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
         setTimeout(() => {
           setPageContext({
             ...PageContext,
-            props,
+            props
           });
         });
       },
 
       contextIsSet(ctx) {
         return PageContext.Component === ctx;
-      },
+      }
     }),
-    [PageContext],
+    [PageContext]
   );
 
   useEffect(() => {
@@ -133,9 +144,18 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
     <div className={contentClass}>
       {enabled && (
         <div className={menubarClass}>
-          <Dropdown.Trigger dropdown={menuDropdownRef} closeOnClickOutside={!sidebarPinned}>
-            <div className={`${menubarClass.elem("trigger")} main-menu-trigger`}>
-              <img src={absoluteURL("/static/icons/logo.svg")} alt="Label Studio Logo" style={{ height: 22 }} />
+          <Dropdown.Trigger
+            dropdown={menuDropdownRef}
+            closeOnClickOutside={!sidebarPinned}
+          >
+            <div
+              className={`${menubarClass.elem("trigger")} main-menu-trigger`}
+            >
+              <img
+                src={absoluteURL("/static/icons/logo.png")}
+                alt="Label Studio Logo"
+                style={{ height: "1.5rem" }}
+              />
               <Hamburger opened={sidebarOpened} />
             </div>
           </Dropdown.Trigger>
@@ -157,12 +177,23 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
                   href={pages.AccountSettingsPage.path}
                 />
                 {/* <Menu.Item label="Dark Mode"/> */}
-                <Menu.Item icon={<IconDoor />} label="Log Out" href={absoluteURL("/logout")} data-external />
+                <Menu.Item
+                  icon={<IconDoor />}
+                  label="Log Out"
+                  href={absoluteURL("/logout")}
+                  data-external
+                />
                 {showNewsletterDot && (
                   <>
                     <Menu.Divider />
-                    <Menu.Item className={cn("newsletter-menu-item")} href={pages.AccountSettingsPage.path}>
-                      <span>Please check new notification settings in the Account & Settings page</span>
+                    <Menu.Item
+                      className={cn("newsletter-menu-item")}
+                      href={pages.AccountSettingsPage.path}
+                    >
+                      <span>
+                        Please check new notification settings in the Account &
+                        Settings page
+                      </span>
                       <span className={cn("newsletter-menu-badge")} />
                     </Menu.Item>
                   </>
@@ -172,7 +203,9 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
           >
             <div title={user?.email} className={menubarClass.elem("user")}>
               <Userpic user={user} isInProgress={isInProgress} />
-              {showNewsletterDot && <div className={menubarClass.elem("userpic-badge")} />}
+              {showNewsletterDot && (
+                <div className={menubarClass.elem("userpic-badge")} />
+              )}
             </div>
           </Dropdown.Trigger>
         </div>
@@ -184,45 +217,42 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
             <Dropdown
               ref={menuDropdownRef}
               onToggle={sidebarToggle}
-              onVisibilityChanged={() => window.dispatchEvent(new Event("resize"))}
+              onVisibilityChanged={() =>
+                window.dispatchEvent(new Event("resize"))
+              }
               visible={sidebarOpened}
-              className={[sidebarClass, sidebarClass.mod({ floating: !sidebarPinned })].join(" ")}
+              className={[
+                sidebarClass,
+                sidebarClass.mod({ floating: !sidebarPinned })
+              ].join(" ")}
               style={{ width: 240 }}
             >
               <Menu>
-                {isFF(FF_HOMEPAGE) && <Menu.Item label="Home" to="/" icon={<IconHome />} data-external exact />}
-                <Menu.Item label="Projects" to="/projects" icon={<IconFolder />} data-external exact />
-                <Menu.Item label="Organization" to="/organization" icon={<IconPersonInCircle />} data-external exact />
+                {isFF(FF_HOMEPAGE) && (
+                  <Menu.Item
+                    label="Home"
+                    to="/"
+                    icon={<IconHome />}
+                    data-external
+                    exact
+                  />
+                )}
+                <Menu.Item
+                  label="Projects"
+                  to="/projects"
+                  icon={<IconFolder />}
+                  data-external
+                  exact
+                />
+                <Menu.Item
+                  label="Organization"
+                  to="/organization"
+                  icon={<IconPersonInCircle />}
+                  data-external
+                  exact
+                />
 
                 <Menu.Spacer />
-
-                <VersionNotifier showNewVersion />
-
-                <Menu.Item
-                  label="API"
-                  href="https://api.labelstud.io/api-reference/introduction/getting-started"
-                  icon={<IconTerminal />}
-                  target="_blank"
-                />
-                <Menu.Item label="Docs" href="https://labelstud.io/guide" icon={<IconBook />} target="_blank" />
-                <Menu.Item
-                  label="GitHub"
-                  href="https://github.com/HumanSignal/label-studio"
-                  icon={<IconGithub />}
-                  target="_blank"
-                  rel="noreferrer"
-                />
-                <Menu.Item
-                  label="Slack Community"
-                  href="https://slack.labelstud.io/?source=product-menu"
-                  icon={<IconSlack />}
-                  target="_blank"
-                  rel="noreferrer"
-                />
-
-                <VersionNotifier showCurrentVersion />
-
-                <Menu.Divider />
 
                 <Menu.Item
                   icon={<IconPin />}
@@ -237,7 +267,11 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
           )}
 
           <MenubarContext.Provider value={providerValue}>
-            <div className={contentClass.elem("content").mod({ withSidebar: sidebarPinned && sidebarOpened })}>
+            <div
+              className={contentClass
+                .elem("content")
+                .mod({ withSidebar: sidebarPinned && sidebarOpened })}
+            >
               {children}
             </div>
           </MenubarContext.Provider>

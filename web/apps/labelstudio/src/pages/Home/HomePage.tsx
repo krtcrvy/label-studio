@@ -1,16 +1,15 @@
-import type { Page } from "../types/Page";
+import { IconFolderAdd, IconFolderOpen, IconUserAdd } from "@humansignal/icons";
 import { Button } from "@humansignal/shad/components/ui/button";
-import { SimpleCard, Spinner } from "@humansignal/ui";
-import { IconExternal, IconFolderAdd, IconHumanSignal, IconUserAdd, IconFolderOpen } from "@humansignal/icons";
-import { HeidiTips } from "../../components/HeidiTips/HeidiTips";
-import { useQuery } from "@tanstack/react-query";
-import { useAPI } from "../../providers/ApiProvider";
-import { useState } from "react";
-import { CreateProject } from "../CreateProject/CreateProject";
-import { InviteLink } from "../Organization/PeoplePage/InviteLink";
 import { Heading, Sub } from "@humansignal/typography";
+import { SimpleCard, Spinner } from "@humansignal/ui";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import { useAPI } from "../../providers/ApiProvider";
+import { CreateProject } from "../CreateProject/CreateProject";
+import { InviteLink } from "../Organization/PeoplePage/InviteLink";
+import type { Page } from "../types/Page";
 
 const PROJECTS_TO_SHOW = 10;
 
@@ -81,7 +80,7 @@ export const HomePage: Page = () => {
 
   return (
     <main className="p-6">
-      <div className="grid grid-cols-[minmax(0,1fr)_450px] gap-6">
+      <div className="grid gap-6">
         <section className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <Heading size={1}>Welcome 👋</Heading>
@@ -145,7 +144,7 @@ export const HomePage: Page = () => {
             ) : null}
           </SimpleCard>
         </section>
-        <section className="flex flex-col gap-6">
+        {/* <section className="flex flex-col gap-6">
           <HeidiTips collection="projectSettings" />
           <SimpleCard title="Resources" description="Learn, explore and get help">
             <ul>
@@ -170,7 +169,7 @@ export const HomePage: Page = () => {
             <IconHumanSignal />
             <span className="text-neutral-content-subtle">Label Studio Version: Community</span>
           </div>
-        </section>
+        </section> */}
       </div>
       {creationDialogOpen && <CreateProject onClose={() => setCreationDialogOpen(false)} />}
       <InviteLink opened={invitationOpen} onClosed={() => setInvitationOpen(false)} />

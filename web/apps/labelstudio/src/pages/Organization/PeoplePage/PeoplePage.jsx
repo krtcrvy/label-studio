@@ -1,23 +1,22 @@
+import { TokenSettingsModal } from "@humansignal/core/blocks/TokenSettingsModal";
+import { debounce } from "@humansignal/core/lib/utils/debounce";
+import { IconPlus } from "@humansignal/icons";
+import { useToast } from "@humansignal/ui";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Button } from "../../../components";
 import { Description } from "../../../components/Description/Description";
 import { Input } from "../../../components/Form";
-import { HeidiTips } from "../../../components/HeidiTips/HeidiTips";
 import { modal } from "../../../components/Modal/Modal";
 import { Space } from "../../../components/Space/Space";
 import { useAPI } from "../../../providers/ApiProvider";
 import { useConfig } from "../../../providers/ConfigProvider";
 import { Block, Elem } from "../../../utils/bem";
-import { FF_AUTH_TOKENS, FF_LSDV_E_297, isFF } from "../../../utils/feature-flags";
+import { FF_AUTH_TOKENS, isFF } from "../../../utils/feature-flags";
+import { InviteLink } from "./InviteLink";
 import "./PeopleInvitation.scss";
 import { PeopleList } from "./PeopleList";
 import "./PeoplePage.scss";
 import { SelectedUser } from "./SelectedUser";
-import { TokenSettingsModal } from "@humansignal/core/blocks/TokenSettingsModal";
-import { IconPlus } from "@humansignal/icons";
-import { useToast } from "@humansignal/ui";
-import { InviteLink } from "./InviteLink";
-import { debounce } from "@humansignal/core/lib/utils/debounce";
 
 const InvitationModal = ({ link }) => {
   return (
@@ -26,19 +25,27 @@ const InvitationModal = ({ link }) => {
         value={link}
         style={{ width: "100%" }}
         readOnly
-        onCopy={debounce(() => __lsa("organization.add_people.manual_copy_link"), 1000)}
-        onSelect={debounce(() => __lsa("organization.add_people.select_link"), 1000)}
+        onCopy={debounce(
+          () => __lsa("organization.add_people.manual_copy_link"),
+          1000
+        )}
+        onSelect={debounce(
+          () => __lsa("organization.add_people.select_link"),
+          1000
+        )}
       />
 
       <Description style={{ marginTop: 16 }}>
-        Invite people to join your Label Studio instance. People that you invite have full access to all of your
-        projects.{" "}
+        Invite people to join your Label Studio instance. People that you invite
+        have full access to all of your projects.{" "}
         <a
           href="https://labelstud.io/guide/signup.html"
           target="_blank"
           rel="noreferrer"
           onClick={() =>
-            __lsa("docs.organization.add_people.learn_more", { href: "https://labelstud.io/guide/signup.html" })
+            __lsa("docs.organization.add_people.learn_more", {
+              href: "https://labelstud.io/guide/signup.html"
+            })
           }
         >
           Learn more
@@ -61,12 +68,12 @@ export const PeoplePage = () => {
   const [link, setLink] = useState();
 
   const selectUser = useCallback(
-    (user) => {
+    user => {
       setSelectedUser(user);
 
       localStorage.setItem("selectedUser", user?.id);
     },
-    [setSelectedUser],
+    [setSelectedUser]
   );
 
   const apiTokensSettingsModalProps = useMemo(
@@ -80,9 +87,9 @@ export const PeoplePage = () => {
             apiSettingsModal.current?.close();
           }}
         />
-      ),
+      )
     }),
-    [],
+    []
   );
 
   const showApiTokenSettingsModal = useCallback(() => {
@@ -101,8 +108,16 @@ export const PeoplePage = () => {
           <Space />
 
           <Space>
-            {isFF(FF_AUTH_TOKENS) && <Button onClick={showApiTokenSettingsModal}>API Tokens Settings</Button>}
-            <Button icon={<IconPlus />} primary onClick={() => setInvitationOpen(true)}>
+            {isFF(FF_AUTH_TOKENS) && (
+              <Button onClick={showApiTokenSettingsModal}>
+                API Tokens Settings
+              </Button>
+            )}
+            <Button
+              icon={<IconPlus />}
+              primary
+              onClick={() => setInvitationOpen(true)}
+            >
               Add People
             </Button>
           </Space>
@@ -112,13 +127,17 @@ export const PeoplePage = () => {
         <PeopleList
           selectedUser={selectedUser}
           defaultSelected={defaultSelected}
-          onSelect={(user) => selectUser(user)}
+          onSelect={user => selectUser(user)}
         />
 
-        {selectedUser ? (
+        {/* {selectedUser ? (
           <SelectedUser user={selectedUser} onClose={() => selectUser(null)} />
         ) : (
           isFF(FF_LSDV_E_297) && <HeidiTips collection="organizationPage" />
+        )} */}
+
+        {selectedUser && (
+          <SelectedUser user={selectedUser} onClose={() => selectUser(null)} />
         )}
       </Elem>
       <InviteLink
