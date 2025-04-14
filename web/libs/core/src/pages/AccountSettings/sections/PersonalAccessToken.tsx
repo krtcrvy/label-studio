@@ -1,42 +1,42 @@
-import { IconLaunch, IconFileCopy, Label } from "@humansignal/ui";
-import styles from "./PersonalAccessToken.module.scss";
-import { atomWithMutation, atomWithQuery } from "jotai-tanstack-query";
+import { IconFileCopy, Label } from "@humansignal/ui";
 import { atom, useAtomValue } from "jotai";
+import { atomWithMutation, atomWithQuery } from "jotai-tanstack-query";
 import { useCopyText } from "../../../lib/hooks/useCopyText";
+import styles from "./PersonalAccessToken.module.scss";
 
 /**
  * FIXME: This is legacy imports. We're not supposed to use such statements
  * each one of these eventually has to be migrated to core/ui
  */
-import { Input, TextArea } from "apps/labelstudio/src/components/Form";
 import { Button } from "apps/labelstudio/src/components/Button/Button";
+import { Input, TextArea } from "apps/labelstudio/src/components/Form";
 
 const tokenAtom = atomWithQuery(() => ({
   queryKey: ["access-token"],
   queryFn: async () => {
     const result = await fetch("/api/current-user/token");
     return result.json();
-  },
+  }
 }));
 
 const resetTokenAtom = atomWithMutation(() => ({
   mutationKey: ["reset-token"],
   mutationFn: async () => {
     const result = await fetch("/api/current-user/reset-token", {
-      method: "post",
+      method: "post"
     });
     return result.json();
-  },
+  }
 }));
 
-const currentTokenAtom = atom((get) => {
+const currentTokenAtom = atom(get => {
   const initialToken = get(tokenAtom).data?.token;
   const resetToken = get(resetTokenAtom).data?.token;
 
   return resetToken ?? initialToken;
 });
 
-const curlStringAtom = atom((get) => {
+const curlStringAtom = atom(get => {
   const currentToken = get(currentTokenAtom);
   const curlString = `curl -X GET ${location.origin}/api/projects/ -H 'Authorization: Token ${currentToken}'`;
   return curlString;
@@ -55,8 +55,17 @@ export const PersonalAccessToken = () => {
         <div>
           <Label text="Access Token" className={styles.label} />
           <div className="flex gap-2 w-full justify-between">
-            <Input name="token" className={styles.input} readOnly value={token} />
-            <Button icon={<IconFileCopy />} onClick={copyToken} disabled={tokenCopied}>
+            <Input
+              name="token"
+              className={styles.input}
+              readOnly
+              value={token}
+            />
+            <Button
+              icon={<IconFileCopy />}
+              onClick={copyToken}
+              disabled={tokenCopied}
+            >
               {tokenCopied ? "Copied!" : "Copy"}
             </Button>
             <Button look="danger" onClick={reset.mutate}>
@@ -74,7 +83,11 @@ export const PersonalAccessToken = () => {
               rawClassName={styles.textarea}
               value={curl}
             />
-            <Button icon={<IconFileCopy />} onClick={copyCurl} disabled={curlCopied}>
+            <Button
+              icon={<IconFileCopy />}
+              onClick={copyCurl}
+              disabled={curlCopied}
+            >
               {curlCopied ? "Copied!" : "Copy"}
             </Button>
           </div>
@@ -88,7 +101,7 @@ export function PersonalAccessTokenDescription() {
   return (
     <p className="m-0">
       Authenticate with our API using your personal access token.
-      {!window.APP_SETTINGS?.whitelabel_is_active && (
+      {/* {!window.APP_SETTINGS?.whitelabel_is_active && (
         <>
           {" "}
           See{" "}
@@ -99,7 +112,7 @@ export function PersonalAccessTokenDescription() {
             </span>
           </a>
         </>
-      )}
+      )} */}
     </p>
   );
 }

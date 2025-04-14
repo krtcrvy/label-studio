@@ -2,26 +2,33 @@ import { EnterpriseBadge } from "@humansignal/ui";
 import React from "react";
 import { useHistory } from "react-router";
 import { Button, ToggleItems } from "../../components";
+import { Caption } from "../../components/Caption/Caption";
+import { Input, Select, TextArea } from "../../components/Form";
 import { Modal } from "../../components/Modal/Modal";
 import { Space } from "../../components/Space/Space";
-import { HeidiTips } from "../../components/HeidiTips/HeidiTips";
 import { useAPI } from "../../providers/ApiProvider";
 import { cn } from "../../utils/bem";
+import { FF_LSDV_E_297, isFF } from "../../utils/feature-flags";
 import { ConfigPage } from "./Config/Config";
 import "./CreateProject.scss";
 import { ImportPage } from "./Import/Import";
 import { useImportPage } from "./Import/useImportPage";
 import { useDraftProject } from "./utils/useDraftProject";
-import { Input, Select, TextArea } from "../../components/Form";
-import { Caption } from "../../components/Caption/Caption";
-import { FF_LSDV_E_297, isFF } from "../../utils/feature-flags";
-import { createURL } from "../../components/HeidiTips/utils";
 
-const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, setDescription, show = true }) =>
+const ProjectName = ({
+  name,
+  setName,
+  onSaveName,
+  onSubmit,
+  error,
+  description,
+  setDescription,
+  show = true
+}) =>
   !show ? null : (
     <form
       className={cn("project-name")}
-      onSubmit={(e) => {
+      onSubmit={e => {
         e.preventDefault();
         onSubmit();
       }}
@@ -32,7 +39,7 @@ const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, 
           name="name"
           id="project_name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           onBlur={onSaveName}
         />
         {error && <span className="error">{error}</span>}
@@ -46,7 +53,7 @@ const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, 
           rows="4"
           style={{ minHeight: 100 }}
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={e => setDescription(e.target.value)}
         />
       </div>
       {isFF(FF_LSDV_E_297) && (
@@ -58,7 +65,7 @@ const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, 
           <Select placeholder="Select an option" disabled options={[]} />
           <Caption>
             Simplify project management by organizing projects into workspaces.
-            <a
+            {/* <a
               href={createURL(
                 "https://docs.humansignal.com/guide/manage_projects#Create-workspaces-to-organize-projects",
                 {
@@ -70,9 +77,9 @@ const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, 
               rel="noreferrer"
             >
               Learn more
-            </a>
+            </a> */}
           </Caption>
-          <HeidiTips collection="projectCreation" />
+          {/* <HeidiTips collection="projectCreation" /> */}
         </div>
       )}
     </form>
@@ -91,12 +98,12 @@ export const CreateProject = ({ onClose }) => {
   const [description, setDescription] = React.useState("");
   const [sample, setSample] = React.useState(null);
 
-  const setStep = React.useCallback((step) => {
+  const setStep = React.useCallback(step => {
     _setStep(step);
     const eventNameMap = {
       name: "project_name",
       import: "data_import",
-      config: "labeling_setup",
+      config: "labeling_setup"
     };
     __lsa(`create_project.tab.${eventNameMap[step]}`);
   }, []);
@@ -105,14 +112,27 @@ export const CreateProject = ({ onClose }) => {
     setError(null);
   }, [name]);
 
-  const { columns, uploading, uploadDisabled, finishUpload, pageProps, uploadSample } = useImportPage(project, sample);
+  const {
+    columns,
+    uploading,
+    uploadDisabled,
+    finishUpload,
+    pageProps,
+    uploadSample
+  } = useImportPage(project, sample);
 
   const rootClass = cn("create-project");
   const tabClass = rootClass.elem("tab");
   const steps = {
-    name: <span className={tabClass.mod({ disabled: !!error })}>Project Name</span>,
-    import: <span className={tabClass.mod({ disabled: uploadDisabled })}>Data Import</span>,
-    config: "Labeling Setup",
+    name: (
+      <span className={tabClass.mod({ disabled: !!error })}>Project Name</span>
+    ),
+    import: (
+      <span className={tabClass.mod({ disabled: uploadDisabled })}>
+        Data Import
+      </span>
+    ),
+    config: "Labeling Setup"
   };
 
   // name intentionally skipped from deps:
@@ -125,9 +145,9 @@ export const CreateProject = ({ onClose }) => {
     () => ({
       title: name,
       description,
-      label_config: project?.label_config ?? "<View></View>",
+      label_config: project?.label_config ?? "<View></View>"
     }),
-    [name, description, project?.label_config],
+    [name, description, project?.label_config]
   );
 
   const onCreate = React.useCallback(async () => {
@@ -142,9 +162,9 @@ export const CreateProject = ({ onClose }) => {
     __lsa("create_project.create", { sample: sample?.url });
     const response = await api.callApi("updateProject", {
       params: {
-        pk: project.id,
+        pk: project.id
       },
-      body: projectBody,
+      body: projectBody
     });
 
     setWaitingStatus(false);
@@ -158,11 +178,11 @@ export const CreateProject = ({ onClose }) => {
     if (error) return;
     const res = await api.callApi("updateProjectRaw", {
       params: {
-        pk: project.id,
+        pk: project.id
       },
       body: {
-        title: name,
-      },
+        title: name
+      }
     });
 
     if (res.ok) return;
@@ -177,8 +197,8 @@ export const CreateProject = ({ onClose }) => {
       if (project)
         await api.callApi("deleteProject", {
           params: {
-            pk: project.id,
-          },
+            pk: project.id
+          }
         });
       setWaitingStatus(false);
       updateProject(null);
@@ -188,14 +208,26 @@ export const CreateProject = ({ onClose }) => {
   }, [project]);
 
   return (
-    <Modal onHide={onDelete} closeOnClickOutside={false} allowToInterceptEscape fullscreen visible bare>
+    <Modal
+      onHide={onDelete}
+      closeOnClickOutside={false}
+      allowToInterceptEscape
+      fullscreen
+      visible
+      bare
+    >
       <div className={rootClass}>
         <Modal.Header>
           <h1>Create Project</h1>
           <ToggleItems items={steps} active={step} onSelect={setStep} />
 
           <Space>
-            <Button look="danger" size="compact" onClick={onDelete} waiting={waiting}>
+            <Button
+              look="danger"
+              size="compact"
+              onClick={onDelete}
+              waiting={waiting}
+            >
               Delete
             </Button>
             <Button
@@ -229,7 +261,7 @@ export const CreateProject = ({ onClose }) => {
         />
         <ConfigPage
           project={project}
-          onUpdate={(config) => {
+          onUpdate={config => {
             updateProject({ ...project, label_config: config });
           }}
           show={step === "config"}

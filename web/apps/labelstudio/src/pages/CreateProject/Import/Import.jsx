@@ -1,8 +1,15 @@
 import { ff } from "@humansignal/core";
 import { SampleDatasetSelect } from "@humansignal/core/blocks/SampleDatasetSelect/SampleDatasetSelect";
-import { IconError, IconFileUpload, IconInfo, IconTrash, IconUpload } from "@humansignal/icons";
+import {
+  IconError,
+  IconFileUpload,
+  IconInfo,
+  IconTrash,
+  IconUpload
+} from "@humansignal/icons";
 import { Badge } from "@humansignal/shad/components/ui/badge";
 import { cn as scn } from "@humansignal/shad/utils";
+import { CodeBlock, SimpleCard, Spinner } from "@humansignal/ui";
 import { Button } from "apps/labelstudio/src/components";
 import { useAtomValue } from "jotai";
 import Input from "libs/datamanager/src/components/Common/Input/Input";
@@ -15,7 +22,6 @@ import { sampleDatasetAtom } from "../utils/atoms";
 import "./Import.scss";
 import samples from "./samples.json";
 import { importFiles } from "./utils";
-import { CodeBlock, SimpleCard, Spinner } from "@humansignal/ui";
 
 const importClass = cn("upload_page");
 const dropzoneClass = cn("dropzone");
@@ -32,7 +38,7 @@ const supportedExtensions = {
   image: ["jpg", "jpeg", "png", "gif", "bmp", "svg", "webp"],
   html: ["html", "htm", "xml"],
   timeSeries: ["csv", "tsv"],
-  common: ["csv", "tsv", "txt", "json"],
+  common: ["csv", "tsv", "txt", "json"]
 };
 const allSupportedExtensions = flatten(Object.values(supportedExtensions));
 
@@ -40,11 +46,14 @@ function getFileExtension(fileName) {
   if (!fileName) {
     return fileName;
   }
-  return fileName.split(".").pop().toLowerCase();
+  return fileName
+    .split(".")
+    .pop()
+    .toLowerCase();
 }
 
 function traverseFileTree(item, path) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     path = path || "";
     if (item.isFile) {
       // Avoid hidden files
@@ -56,8 +65,8 @@ function traverseFileTree(item, path) {
       const dirReader = item.createReader();
       const dirPath = `${path + item.name}/`;
 
-      dirReader.readEntries((entries) => {
-        Promise.all(entries.map((entry) => traverseFileTree(entry, dirPath)))
+      dirReader.readEntries(entries => {
+        Promise.all(entries.map(entry => traverseFileTree(entry, dirPath)))
           .then(flatten)
           .then(resolve);
       });
@@ -67,17 +76,19 @@ function traverseFileTree(item, path) {
 
 function getFiles(files) {
   // @todo this can be not a files, but text or any other draggable stuff
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     if (!files.length) return resolve([]);
     if (!files[0].webkitGetAsEntry) return resolve(files);
 
     // Use DataTransferItemList interface to access the file(s)
-    const entries = Array.from(files).map((file) => file.webkitGetAsEntry());
+    const entries = Array.from(files).map(file => file.webkitGetAsEntry());
 
     Promise.all(entries.map(traverseFileTree))
       .then(flatten)
-      .then((fileEntries) => fileEntries.map((fileEntry) => new Promise((res) => fileEntry.file(res))))
-      .then((filePromises) => Promise.all(filePromises))
+      .then(fileEntries =>
+        fileEntries.map(fileEntry => new Promise(res => fileEntry.file(res)))
+      )
+      .then(filePromises => Promise.all(filePromises))
       .then(resolve);
   });
 }
@@ -85,14 +96,26 @@ function getFiles(files) {
 const Footer = () => {
   return (
     <Modal.Footer className="import-footer">
-      <IconInfo className={scn(importClass.elem("info-icon"), "mr-1")} width="20" height="20" />
+      <IconInfo
+        className={scn(importClass.elem("info-icon"), "mr-1")}
+        width="20"
+        height="20"
+      />
       <span>
         See the&nbsp;documentation to{" "}
-        <a target="_blank" href="https://labelstud.io/guide/predictions.html" rel="noreferrer">
+        <a
+          target="_blank"
+          href="https://labelstud.io/guide/predictions.html"
+          rel="noreferrer"
+        >
           import preannotated data
         </a>{" "}
         or&nbsp;to{" "}
-        <a target="_blank" href="https://labelstud.io/guide/storage.html" rel="noreferrer">
+        <a
+          target="_blank"
+          href="https://labelstud.io/guide/storage.html"
+          rel="noreferrer"
+        >
           sync data from a&nbsp;database or&nbsp;cloud storage
         </a>
         .
@@ -103,7 +126,7 @@ const Footer = () => {
 
 const Upload = ({ children, sendFiles }) => {
   const [hovered, setHovered] = useState(false);
-  const onHover = (e) => {
+  const onHover = e => {
     e.preventDefault();
     setHovered(true);
   };
@@ -111,12 +134,12 @@ const Upload = ({ children, sendFiles }) => {
   const dropzoneRef = useRef();
 
   const onDrop = useCallback(
-    (e) => {
+    e => {
       e.preventDefault();
       onLeave();
-      getFiles(e.dataTransfer.items).then((files) => sendFiles(files));
+      getFiles(e.dataTransfer.items).then(files => sendFiles(files));
     },
-    [onLeave, sendFiles],
+    [onLeave, sendFiles]
   );
 
   return (
@@ -167,7 +190,7 @@ export const ImportPage = ({
   csvHandling,
   setCsvHandling,
   addColumns,
-  openLabelingConfig,
+  openLabelingConfig
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -180,10 +203,19 @@ export const ImportPage = ({
       return { ...state, uploading: [...action.sending, ...state.uploading] };
     }
     if (action.sent) {
-      return { ...state, uploading: state.uploading.filter((f) => !action.sent.includes(f)) };
+      return {
+        ...state,
+        uploading: state.uploading.filter(f => !action.sent.includes(f))
+      };
     }
     if (action.uploaded) {
-      return { ...state, uploaded: unique([...state.uploaded, ...action.uploaded], (a, b) => a.id === b.id) };
+      return {
+        ...state,
+        uploaded: unique(
+          [...state.uploaded, ...action.uploaded],
+          (a, b) => a.id === b.id
+        )
+      };
     }
     if (action.ids) {
       const ids = unique([...state.ids, ...action.ids]);
@@ -194,11 +226,17 @@ export const ImportPage = ({
     return state;
   };
 
-  const [files, dispatch] = useReducer(processFiles, { uploaded: [], uploading: [], ids: [] });
-  const showList = Boolean(files.uploaded?.length || files.uploading?.length || sample);
+  const [files, dispatch] = useReducer(processFiles, {
+    uploaded: [],
+    uploading: [],
+    ids: []
+  });
+  const showList = Boolean(
+    files.uploaded?.length || files.uploading?.length || sample
+  );
 
   const loadFilesList = useCallback(
-    async (file_upload_ids) => {
+    async file_upload_ids => {
       const query = {};
 
       if (file_upload_ids) {
@@ -206,24 +244,24 @@ export const ImportPage = ({
         query.ids = JSON.stringify(file_upload_ids);
       }
       const files = await api.callApi("fileUploads", {
-        params: { pk: project.id, ...query },
+        params: { pk: project.id, ...query }
       });
 
       dispatch({ uploaded: files ?? [] });
 
       if (files?.length) {
-        dispatch({ ids: files.map((f) => f.id) });
+        dispatch({ ids: files.map(f => f.id) });
       }
       return files;
     },
-    [project?.id],
+    [project?.id]
   );
 
   const onStart = () => {
     setLoading(true);
     setError(null);
   };
-  const onError = (err) => {
+  const onError = err => {
     console.error(err);
     // @todo workaround for error about input size in a wrong html format
     if (typeof err === "string" && err.includes("RequestDataTooBig")) {
@@ -237,7 +275,7 @@ export const ImportPage = ({
     onWaiting?.(false);
   };
   const onFinish = useCallback(
-    async (res) => {
+    async res => {
       const { could_be_tasks_list, data_columns, file_upload_ids } = res;
 
       dispatch({ ids: file_upload_ids });
@@ -248,7 +286,7 @@ export const ImportPage = ({
 
       return loadFilesList(file_upload_ids).then(() => setLoading(false));
     },
-    [addColumns, loadFilesList, setLoading],
+    [addColumns, loadFilesList, setLoading]
   );
 
   const importFilesImmediately = useCallback(
@@ -259,16 +297,16 @@ export const ImportPage = ({
         project,
         onError,
         onFinish,
-        onUploadStart: (files) => dispatch({ sending: files }),
-        onUploadFinish: (files) => dispatch({ sent: files }),
-        dontCommitToProject,
+        onUploadStart: files => dispatch({ sending: files }),
+        onUploadFinish: files => dispatch({ sent: files }),
+        dontCommitToProject
       });
     },
-    [project, onFinish],
+    [project, onFinish]
   );
 
   const sendFiles = useCallback(
-    (files) => {
+    files => {
       onStart();
       onWaiting?.(true);
       files = [...files]; // they can be array-like object
@@ -276,26 +314,28 @@ export const ImportPage = ({
 
       for (const f of files) {
         if (!allSupportedExtensions.includes(getFileExtension(f.name))) {
-          onError(new Error(`The filetype of file "${f.name}" is not supported.`));
+          onError(
+            new Error(`The filetype of file "${f.name}" is not supported.`)
+          );
           return;
         }
         fd.append(f.name, f);
       }
       return importFilesImmediately(files, fd);
     },
-    [importFilesImmediately, onStart],
+    [importFilesImmediately, onStart]
   );
 
   const onUpload = useCallback(
-    (e) => {
+    e => {
       sendFiles(e.target.files);
       e.target.value = "";
     },
-    [sendFiles],
+    [sendFiles]
   );
 
   const onLoadURL = useCallback(
-    (e) => {
+    e => {
       e.preventDefault();
       onStart();
       const url = urlRef.current?.value;
@@ -310,24 +350,27 @@ export const ImportPage = ({
 
       importFilesImmediately([{ name: url }], body);
     },
-    [importFilesImmediately],
+    [importFilesImmediately]
   );
 
   const openConfig = useCallback(
-    (e) => {
+    e => {
       e.preventDefault();
       e.stopPropagation();
       openLabelingConfig?.();
     },
-    [openLabelingConfig],
+    [openLabelingConfig]
   );
 
   useEffect(() => {
     if (project?.id !== undefined) {
-      loadFilesList().then((files) => {
+      loadFilesList().then(files => {
         if (csvHandling) return;
         // empirical guess on start if we have some possible tasks list/time series problem
-        if (Array.isArray(files) && files.some(({ file }) => /\.[ct]sv$/.test(file))) {
+        if (
+          Array.isArray(files) &&
+          files.some(({ file }) => /\.[ct]sv$/.test(file))
+        ) {
           setCsvHandling("choose");
         }
       });
@@ -342,17 +385,35 @@ export const ImportPage = ({
   const csvProps = {
     name: "csv",
     type: "radio",
-    onChange: (e) => setCsvHandling(e.target.value),
+    onChange: e => setCsvHandling(e.target.value)
   };
 
   return (
     <div className={importClass}>
-      {highlightCsvHandling && <div className={importClass.elem("csv-splash")} />}
-      <input id="file-input" type="file" name="file" multiple onChange={onUpload} style={{ display: "none" }} />
+      {highlightCsvHandling && (
+        <div className={importClass.elem("csv-splash")} />
+      )}
+      <input
+        id="file-input"
+        type="file"
+        name="file"
+        multiple
+        onChange={onUpload}
+        style={{ display: "none" }}
+      />
 
       <header className="flex gap-4">
-        <form className={`${importClass.elem("url-form")} inline-flex`} method="POST" onSubmit={onLoadURL}>
-          <Input placeholder="Dataset URL" name="url" ref={urlRef} style={{ height: 40 }} />
+        <form
+          className={`${importClass.elem("url-form")} inline-flex`}
+          method="POST"
+          onSubmit={onLoadURL}
+        >
+          <Input
+            placeholder="Dataset URL"
+            name="url"
+            ref={urlRef}
+            style={{ height: 40 }}
+          />
           <Button type="submit" look="primary">
             Add URL
           </Button>
@@ -363,25 +424,43 @@ export const ImportPage = ({
           onClick={() => document.getElementById("file-input").click()}
           className={importClass.elem("upload-button")}
         >
-          <IconUpload width="16" height="16" className={importClass.elem("upload-icon")} />
+          <IconUpload
+            width="16"
+            height="16"
+            className={importClass.elem("upload-icon")}
+          />
           Upload {files.uploaded.length ? "More " : ""}Files
         </Button>
         {ff.isActive(ff.FF_SAMPLE_DATASETS) && (
-          <SampleDatasetSelect samples={samples} sample={sample} onSampleApplied={onSampleDatasetSelect} />
+          <SampleDatasetSelect
+            samples={samples}
+            sample={sample}
+            onSampleApplied={onSampleDatasetSelect}
+          />
         )}
         <div
-          className={importClass.elem("csv-handling").mod({ highlighted: highlightCsvHandling, hidden: !csvHandling })}
+          className={importClass
+            .elem("csv-handling")
+            .mod({ highlighted: highlightCsvHandling, hidden: !csvHandling })}
         >
           <span>Treat CSV/TSV as</span>
           <label>
-            <input {...csvProps} value="tasks" checked={csvHandling === "tasks"} /> List of tasks
+            <input
+              {...csvProps}
+              value="tasks"
+              checked={csvHandling === "tasks"}
+            />{" "}
+            List of tasks
           </label>
           <label>
-            <input {...csvProps} value="ts" checked={csvHandling === "ts"} /> Time Series or Whole Text File
+            <input {...csvProps} value="ts" checked={csvHandling === "ts"} />{" "}
+            Time Series or Whole Text File
           </label>
         </div>
         <div className={importClass.elem("status")}>
-          {files.uploaded.length ? `${files.uploaded.length} files uploaded` : ""}
+          {files.uploaded.length
+            ? `${files.uploaded.length} files uploaded`
+            : ""}
         </div>
       </header>
 
@@ -389,7 +468,11 @@ export const ImportPage = ({
 
       <main>
         <Upload sendFiles={sendFiles} project={project}>
-          <div className={scn("flex gap-4 min-h-full", { "justify-center": !showList })}>
+          <div
+            className={scn("flex gap-4 min-h-full", {
+              "justify-center": !showList
+            })}
+          >
             {!showList && (
               <div className="flex gap-4 justify-center items-start">
                 <label htmlFor="file-input">
@@ -399,14 +482,20 @@ export const ImportPage = ({
                       <br />
                       or click to browse
                     </header>
-                    <IconFileUpload height="64" className={dropzoneClass.elem("icon")} />
+                    <IconFileUpload
+                      height="64"
+                      className={dropzoneClass.elem("icon")}
+                    />
                     <dl>
                       <dt>Text</dt>
                       <dd>{supportedExtensions.text.join(", ")}</dd>
                       <dt>Audio</dt>
                       <dd>{supportedExtensions.audio.join(", ")}</dd>
                       <dt>Video</dt>
-                      <dd>mpeg4/H.264 webp, webm* {/* Keep in sync with supportedExtensions.video */}</dd>
+                      <dd>
+                        mpeg4/H.264 webp, webm*{" "}
+                        {/* Keep in sync with supportedExtensions.video */}
+                      </dd>
                       <dt>Images</dt>
                       <dd>{supportedExtensions.image.join(", ")}</dd>
                       <dt>HTML</dt>
@@ -423,7 +512,11 @@ export const ImportPage = ({
                         limitations
                       </a>{" "}
                       and we strongly recommend using{" "}
-                      <a href="https://labelstud.io/guide/storage.html" target="_blank" rel="noreferrer">
+                      <a
+                        href="https://labelstud.io/guide/storage.html"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Cloud Storage
                       </a>{" "}
                       instead
@@ -442,7 +535,10 @@ export const ImportPage = ({
                         <td>
                           <div className="flex items-center gap-2">
                             {sample.title}
-                            <Badge variant="info" className="h-5 text-xs rounded-sm">
+                            <Badge
+                              variant="info"
+                              className="h-5 text-xs rounded-sm"
+                            >
                               Sample
                             </Badge>
                           </div>
@@ -464,11 +560,15 @@ export const ImportPage = ({
                       <tr key={`${idx}-${file.name}`}>
                         <td>{file.name}</td>
                         <td colSpan={2}>
-                          <span className={importClass.elem("file-status").mod({ uploading: true })} />
+                          <span
+                            className={importClass
+                              .elem("file-status")
+                              .mod({ uploading: true })}
+                          />
                         </td>
                       </tr>
                     ))}
-                    {files.uploaded.map((file) => (
+                    {files.uploaded.map(file => (
                       <tr key={file.file}>
                         <td>{file.file}</td>
                         <td>
@@ -484,7 +584,10 @@ export const ImportPage = ({
 
             <div className="w-[650px]">
               {projectConfigured && ff.isFF(ff.FF_SAMPLE_DATASETS) ? (
-                <SimpleCard title="Expected input preview" className="w-[650px] h-full">
+                <SimpleCard
+                  title="Expected input preview"
+                  className="w-[650px] h-full"
+                >
                   {sampleConfig.data ? (
                     <CodeBlock
                       title="Expected input preview"
@@ -496,11 +599,16 @@ export const ImportPage = ({
                       <Spinner className="h-6 w-6" />
                     </div>
                   ) : sampleConfig.isError ? (
-                    <div className="w-full pt-4 text-lg text-negative-content">Unable to load sample data</div>
+                    <div className="w-full pt-4 text-lg text-negative-content">
+                      Unable to load sample data
+                    </div>
                   ) : null}
                 </SimpleCard>
               ) : ff.isFF(ff.FF_SAMPLE_DATASETS) ? (
-                <SimpleCard title="Expected input preview" className="w-[650px] h-full">
+                <SimpleCard
+                  title="Expected input preview"
+                  className="w-[650px] h-full"
+                >
                   Set up your{" "}
                   <button
                     type="button"
@@ -518,7 +626,7 @@ export const ImportPage = ({
         </Upload>
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

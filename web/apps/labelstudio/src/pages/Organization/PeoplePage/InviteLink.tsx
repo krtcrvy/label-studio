@@ -1,13 +1,13 @@
+import { Space } from "@humansignal/ui/lib/space/space";
+import { Button } from "apps/labelstudio/src/components";
 import { Description } from "apps/labelstudio/src/components/Description/Description";
 import { Block } from "apps/labelstudio/src/components/Menu/MenuContext";
-import { Input } from "../../../components/Form";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Space } from "@humansignal/ui/lib/space/space";
-import { API } from "apps/labelstudio/src/providers/ApiProvider";
-import { atomWithQuery } from "jotai-tanstack-query";
-import { useAtomValue } from "jotai";
 import { Modal } from "apps/labelstudio/src/components/Modal/ModalPopup";
-import { Button } from "apps/labelstudio/src/components";
+import { API } from "apps/labelstudio/src/providers/ApiProvider";
+import { useAtomValue } from "jotai";
+import { atomWithQuery } from "jotai-tanstack-query";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Input } from "../../../components/Form";
 
 const linkAtom = atomWithQuery(() => ({
   queryKey: ["invite-link"],
@@ -16,13 +16,13 @@ const linkAtom = atomWithQuery(() => ({
     // will also be reset when called `refetch()` on the Reset button
     const result = await API.invoke("resetInviteLink");
     return location.origin + result.invite_url;
-  },
+  }
 }));
 
 export function InviteLink({
   opened,
   onOpened,
-  onClosed,
+  onClosed
 }: {
   opened: boolean;
   onOpened?: () => void;
@@ -59,9 +59,9 @@ const InvitationModal = () => {
       <Input value={link} style={{ width: "100%" }} readOnly />
 
       <Description style={{ marginTop: 16 }}>
-        Invite people to join your Label Studio instance. People that you invite have full access to all of your
-        projects.{" "}
-        <a
+        Invite people to join your Label Studio instance. People that you invite
+        have full access to all of your projects.{" "}
+        {/* <a
           href="https://labelstud.io/guide/signup.html"
           target="_blank"
           rel="noreferrer"
@@ -70,7 +70,7 @@ const InvitationModal = () => {
           }
         >
           Learn more
-        </a>
+        </a> */}
         .
       </Description>
     </Block>
@@ -84,12 +84,20 @@ const InvitationFooter = () => {
   return (
     <Space spread>
       <Space>
-        <Button variant="secondary" style={{ width: 170 }} onClick={() => refetch()}>
+        <Button
+          variant="secondary"
+          style={{ width: 170 }}
+          onClick={() => refetch()}
+        >
           Reset Link
         </Button>
       </Space>
       <Space>
-        <Button look="primary" style={{ width: 170 }} onClick={() => copyText(link!)}>
+        <Button
+          look="primary"
+          style={{ width: 170 }}
+          onClick={() => copyText(link!)}
+        >
           {copied ? "Copied!" : "Copy link"}
         </Button>
       </Space>

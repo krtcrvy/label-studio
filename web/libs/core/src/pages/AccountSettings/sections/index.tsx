@@ -1,11 +1,10 @@
-import { PersonalInfo } from "./PersonalInfo";
-import { EmailPreferences } from "./EmailPreferences";
-import { PersonalAccessToken, PersonalAccessTokenDescription } from "./PersonalAccessToken";
-import { MembershipInfo } from "./MembershipInfo";
-import type React from "react";
-import { PersonalJWTToken } from "./PersonalJWTToken";
-import type { AuthTokenSettings } from "../types";
 import { ff } from "@humansignal/core";
+import type React from "react";
+import type { AuthTokenSettings } from "../types";
+import { MembershipInfo } from "./MembershipInfo";
+import { PersonalAccessToken, PersonalAccessTokenDescription } from "./PersonalAccessToken";
+import { PersonalInfo } from "./PersonalInfo";
+import { PersonalJWTToken } from "./PersonalJWTToken";
 
 type SectionType = {
   title: string;
@@ -21,11 +20,11 @@ export const accountSettingsSections = (settings: AuthTokenSettings): SectionTyp
       id: "personal-info",
       component: PersonalInfo,
     },
-    {
+    /* {
       title: "Email Preferences",
       id: "email-preferences",
       component: EmailPreferences,
-    },
+    }, */
     {
       title: "Membership Info",
       id: "membership-info",

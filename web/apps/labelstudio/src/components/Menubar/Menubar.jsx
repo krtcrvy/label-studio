@@ -154,7 +154,7 @@ export const Menubar = ({
               <img
                 src={absoluteURL("/static/icons/logo.png")}
                 alt="Label Studio Logo"
-                style={{ height: "1.5rem" }}
+                style={{ height: "2rem" }}
               />
               <Hamburger opened={sidebarOpened} />
             </div>

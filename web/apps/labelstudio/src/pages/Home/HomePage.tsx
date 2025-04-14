@@ -13,7 +13,7 @@ import type { Page } from "../types/Page";
 
 const PROJECTS_TO_SHOW = 10;
 
-const resources = [
+/* const resources = [
   {
     title: "Documentation",
     url: "https://labelstud.io/guide/",
@@ -34,7 +34,7 @@ const resources = [
     title: "Slack Community",
     url: "https://slack.labelstud.io",
   },
-];
+]; */
 
 const actions = [
   {
