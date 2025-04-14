@@ -12,12 +12,8 @@ body {
 
 .login_page_new_ui .left {
   flex: 1;
-  background: linear-gradient(
-    109.47deg,
-    rgba(255, 166, 99, 0.15) 0%,
-    rgba(255, 117, 87, 0.15) 51.56%,
-    rgba(227, 123, 211, 0.15) 100%
-  );
+  background: url("../images/auth_bg.jpeg") no-repeat center center;
+  background-size: cover;
   height: 100%;
   position: relative;
   display: flex;
@@ -26,7 +22,7 @@ body {
   align-items: center;
 }
 
-.login_page_new_ui .left:after {
+/* .login_page_new_ui .left:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -35,7 +31,7 @@ body {
   height: 239px;
   background: url("../images/login-bg.svg") no-repeat center center;
   background-size: contain;
-}
+} */
 
 .login_page_new_ui .left h2 {
   font-size: 24px;
