@@ -1,13 +1,13 @@
+import { IconPredictions } from "@humansignal/ui";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Description } from "../../../components/Description/Description";
 import { Divider } from "../../../components/Divider/Divider";
 import { EmptyState } from "../../../components/EmptyState/EmptyState";
-import { IconPredictions } from "@humansignal/ui";
+import { Spinner } from "../../../components/Spinner/Spinner";
 import { useAPI } from "../../../providers/ApiProvider";
 import { ProjectContext } from "../../../providers/ProjectProvider";
-import { Spinner } from "../../../components/Spinner/Spinner";
-import { PredictionsList } from "./PredictionsList";
 import { Block, Elem } from "../../../utils/bem";
+import { PredictionsList } from "./PredictionsList";
 import "./PredictionsSettings.scss";
 
 export const PredictionsSettings = () => {
@@ -22,8 +22,8 @@ export const PredictionsSettings = () => {
     const versions = await api.callApi("projectModelVersions", {
       params: {
         pk: project.id,
-        extended: true,
-      },
+        extended: true
+      }
     });
 
     if (versions) setVersions(versions.static);
@@ -46,9 +46,14 @@ export const PredictionsSettings = () => {
           <Elem name="title-block">
             <Elem name="title">Predictions List</Elem>
             <Description style={{ marginTop: "1em" }}>
-              List of predictions available in the project. Each card is associated with a separate model version. To
-              learn about how to import predictions,{" "}
-              <a href="https://labelstud.io/guide/predictions.html" target="_blank" rel="noreferrer">
+              List of predictions available in the project. Each card is
+              associated with a separate model version. To learn about how to
+              import predictions,{" "}
+              <a
+                href="https://labelstud.io/guide/predictions.html"
+                target="_blank"
+                rel="noreferrer"
+              >
                 see&nbsp;the&nbsp;documentation
               </a>
               .
@@ -61,19 +66,23 @@ export const PredictionsSettings = () => {
             icon={<IconPredictions />}
             title="No predictions yet uploaded"
             description="Predictions could be used to prelabel the data, or validate the model. You can upload and select predictions from multiple model versions. You can also connect live models in the Model tab."
-            footer={
-              <div>
-                Need help?
-                <br />
-                <a href="https://labelstud.io/guide/predictions" target="_blank" rel="noreferrer">
-                  Learn more on how to upload predictions in our docs
-                </a>
-              </div>
-            }
+            // footer={
+            //   <div>
+            //     Need help?
+            //     <br />
+            //     <a href="https://labelstud.io/guide/predictions" target="_blank" rel="noreferrer">
+            //       Learn more on how to upload predictions in our docs
+            //     </a>
+            //   </div>
+            // }
           />
         )}
 
-        <PredictionsList project={project} versions={versions} fetchVersions={fetchVersions} />
+        <PredictionsList
+          project={project}
+          versions={versions}
+          fetchVersions={fetchVersions}
+        />
 
         <Divider height={32} />
       </Elem>

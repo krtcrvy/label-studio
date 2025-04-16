@@ -3,12 +3,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAPI } from "../../providers/ApiProvider";
 import "./WebhookPage.scss";
 
-import WebhookList from "./WebhookList";
-import WebhookDetail from "./WebhookDetail";
-import { useProject } from "../../providers/ProjectProvider";
-import { Block, Elem } from "../../utils/bem";
 import { IconInfo } from "@humansignal/icons";
 import { useHistory } from "react-router";
+import { useProject } from "../../providers/ProjectProvider";
+import { Block, Elem } from "../../utils/bem";
+import WebhookDetail from "./WebhookDetail";
+import WebhookList from "./WebhookList";
 
 const Webhook = () => {
   const [activeWebhook, setActiveWebhook] = useState(null);
@@ -43,7 +43,7 @@ const Webhook = () => {
       params.project = null;
     }
     const webhooks = await api.callApi("webhooks", {
-      params,
+      params
     });
 
     if (webhooks) setWebhooks(webhooks);
@@ -61,7 +61,7 @@ const Webhook = () => {
     }
 
     const info = await api.callApi("webhooksInfo", {
-      params,
+      params
     });
 
     if (info) setWebhooksInfo(info);
@@ -103,7 +103,7 @@ const Webhook = () => {
       <WebhookDetail
         onSelectActive={setActiveWebhook}
         onBack={() => setActiveWebhook(null)}
-        webhook={webhooks[webhooks.findIndex((x) => x.id === activeWebhook)]}
+        webhook={webhooks[webhooks.findIndex(x => x.id === activeWebhook)]}
         fetchWebhooks={fetchWebhooks}
         webhooksInfo={webhooksInfo}
       />
@@ -118,15 +118,16 @@ const Webhook = () => {
         </Elem>
         <Elem name="footer-text">
           <p>
-            Webhooks allow external services to be notified when certain events happen. When the specified events occur,
-            a POST request is sent to each of the URLs you provide.
+            Webhooks allow external services to be notified when certain events
+            happen. When the specified events occur, a POST request is sent to
+            each of the URLs you provide.
           </p>
-          <p>
+          {/* <p>
             <a href="https://labelstud.io/guide/webhooks.html" target="_blank" rel="noreferrer">
               Read more in the documentation
             </a>
             .
-          </p>
+          </p> */}
         </Elem>
       </Elem>
     </Block>
@@ -136,5 +137,5 @@ const Webhook = () => {
 export const WebhookPage = {
   title: "Webhooks",
   path: "/webhooks",
-  component: Webhook,
+  component: Webhook
 };

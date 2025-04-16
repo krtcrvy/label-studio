@@ -1,13 +1,13 @@
+import { useAtomValue } from "jotai";
 import { useCallback, useContext, useEffect } from "react";
 import { Button, Columns } from "../../../components";
 import { confirm, modal } from "../../../components/Modal/Modal";
 import { Spinner } from "../../../components/Spinner/Spinner";
 import { ApiContext } from "../../../providers/ApiProvider";
 import { projectAtom } from "../../../providers/ProjectProvider";
+import { useStorageCard } from "./hooks/useStorageCard";
 import { StorageCard } from "./StorageCard";
 import { StorageForm } from "./StorageForm";
-import { useAtomValue } from "jotai";
-import { useStorageCard } from "./hooks/useStorageCard";
 
 export const StorageSet = ({ title, target, rootClass, buttonLabel }) => {
   const api = useContext(ApiContext);
@@ -26,11 +26,11 @@ export const StorageSet = ({ title, target, rootClass, buttonLabel }) => {
     reloadStoragesList,
     loading,
     loaded,
-    fetchStorages,
+    fetchStorages
   } = useStorageCard(target, project?.id);
 
   const showStorageFormModal = useCallback(
-    (storage) => {
+    storage => {
       const action = storage ? "Edit" : "Add";
       const actionTarget = target === "export" ? "Target" : "Source";
       const title = `${action} ${actionTarget} Storage`;
@@ -54,25 +54,26 @@ export const StorageSet = ({ title, target, rootClass, buttonLabel }) => {
         ),
         footer: (
           <>
-            Save completed annotations to Amazon S3, Google Cloud, Microsoft Azure, or Redis.
-            <br />
-            <a href="https://labelstud.io/guide/storage.html">See more in the documentation</a>.
+            Save completed annotations to Amazon S3, Google Cloud, Microsoft
+            Azure, or Redis.
+            {/* <br />
+            <a href="https://labelstud.io/guide/storage.html">See more in the documentation</a>. */}
           </>
-        ),
+        )
       });
     },
-    [project, fetchStorages, target, rootClass],
+    [project, fetchStorages, target, rootClass]
   );
 
   const onEditStorage = useCallback(
-    async (storage) => {
+    async storage => {
       showStorageFormModal(storage);
     },
-    [showStorageFormModal],
+    [showStorageFormModal]
   );
 
   const onDeleteStorage = useCallback(
-    async (storage) => {
+    async storage => {
       confirm({
         title: "Deleting storage",
         body: "This action cannot be undone. Are you sure?",
@@ -82,15 +83,15 @@ export const StorageSet = ({ title, target, rootClass, buttonLabel }) => {
             params: {
               type: storage.type,
               pk: storage.id,
-              target,
-            },
+              target
+            }
           });
 
           if (response !== null) fetchStorages();
-        },
+        }
       });
     },
-    [fetchStorages],
+    [fetchStorages]
   );
 
   useEffect(() => {
@@ -110,7 +111,7 @@ export const StorageSet = ({ title, target, rootClass, buttonLabel }) => {
           <Spinner size={32} />
         </div>
       ) : storagesLoaded && storages.length === 0 ? null : (
-        storages?.map?.((storage) => (
+        storages?.map?.(storage => (
           <StorageCard
             key={storage.id}
             storage={storage}

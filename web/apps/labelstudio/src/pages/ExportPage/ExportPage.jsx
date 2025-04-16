@@ -25,7 +25,7 @@ const downloadFile = (blob, filename) => {
 
 const { Block, Elem } = BemWithSpecifiContext();
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 5000));
+const wait = () => new Promise(resolve => setTimeout(resolve, 5000));
 
 export const ExportPage = () => {
   const history = useHistory();
@@ -52,14 +52,14 @@ export const ExportPage = () => {
     const params = form.current.assembleFormData({
       asJSON: true,
       full: true,
-      booleansAsNumbers: true,
+      booleansAsNumbers: true
     });
 
     const response = await api.callApi("exportRaw", {
       params: {
         pk: pageParams.id,
-        ...params,
-      },
+        ...params
+      }
     });
 
     if (response.ok) {
@@ -80,8 +80,8 @@ export const ExportPage = () => {
       api
         .callApi("previousExports", {
           params: {
-            pk: pageParams.id,
-          },
+            pk: pageParams.id
+          }
         })
         .then(({ export_files }) => {
           setPreviousExports(export_files.slice(0, 1));
@@ -90,10 +90,10 @@ export const ExportPage = () => {
       api
         .callApi("exportFormats", {
           params: {
-            pk: pageParams.id,
-          },
+            pk: pageParams.id
+          }
         })
-        .then((formats) => {
+        .then(formats => {
           setAvailableFormats(formats);
           setCurrentFormat(formats[0]?.name);
         });
@@ -119,7 +119,7 @@ export const ExportPage = () => {
         <FormatInfo
           availableFormats={availableFormats}
           selected={currentFormat}
-          onClick={(format) => setCurrentFormat(format.name)}
+          onClick={format => setCurrentFormat(format.name)}
         />
 
         <Form ref={form}>
@@ -131,8 +131,15 @@ export const ExportPage = () => {
             <Elem name="recent">{/* {exportHistory} */}</Elem>
             <Elem name="actions">
               <Space>
-                {downloadingMessage && "Files are being prepared. It might take some time."}
-                <Elem tag={Button} name="finish" look="primary" onClick={proceedExport} waiting={downloading}>
+                {downloadingMessage &&
+                  "Files are being prepared. It might take some time."}
+                <Elem
+                  tag={Button}
+                  name="finish"
+                  look="primary"
+                  onClick={proceedExport}
+                  waiting={downloading}
+                >
                   Export
                 </Elem>
               </Space>
@@ -147,15 +154,17 @@ export const ExportPage = () => {
 const FormatInfo = ({ availableFormats, selected, onClick }) => {
   return (
     <Block name="formats">
-      <Elem name="info">You can export dataset in one of the following formats:</Elem>
+      <Elem name="info">
+        You can export dataset in one of the following formats:
+      </Elem>
       <Elem name="list">
-        {availableFormats.map((format) => (
+        {availableFormats.map(format => (
           <Elem
             key={format.name}
             name="item"
             mod={{
               active: !format.disabled,
-              selected: format.name === selected,
+              selected: format.name === selected
             }}
             onClick={!format.disabled ? () => onClick(format) : null}
           >
@@ -171,11 +180,13 @@ const FormatInfo = ({ availableFormats, selected, onClick }) => {
               </Space>
             </Elem>
 
-            {format.description && <Elem name="description">{format.description}</Elem>}
+            {format.description && (
+              <Elem name="description">{format.description}</Elem>
+            )}
           </Elem>
         ))}
       </Elem>
-      <Elem name="feedback">
+      {/* <Elem name="feedback">
         Can't find an export format?
         <br />
         Please let us know in{" "}
@@ -191,7 +202,7 @@ const FormatInfo = ({ availableFormats, selected, onClick }) => {
         >
           Repository
         </a>
-      </Elem>
+      </Elem> */}
     </Block>
   );
 };

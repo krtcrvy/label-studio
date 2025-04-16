@@ -1,28 +1,29 @@
 .badge {
   display: inline-block;
   border-radius: 4px;
-  background: linear-gradient(135deg, #FFA663 0%, #FF7557 51.56%, #E37BD3 100%);
+  // background: linear-gradient(135deg, #a0f2d3 0%, #15e194 51.56%, #0c7b52 100%);
+  background: #e6fcf4;
   vertical-align: middle;
-  height: 20px;
+  // height: 20px;
 }
 
 .filled {
   .label {
     background: none;
-    color: var(--persimmon_0);
+    color: var(--grape_0);
   }
 
   .icon {
     path {
-      fill: var(--persimmon_0);
+      fill: var(--grape_0);
     }
   }
 }
 
 .label {
   margin: 1px;
-  background: var(--persimmon_0);
-  color: var(--persimmon_400);
+  background: var(--grape_0);
+  color: var(--grape_500);
   border-radius: 3px;
   font-size: 11px;
   padding: 2px 5px 2px 3px;

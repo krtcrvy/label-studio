@@ -1,10 +1,10 @@
+import CM from "codemirror";
+import "codemirror/addon/hint/show-hint";
+import "codemirror/addon/hint/show-hint.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/xml/xml";
 import React, { useEffect, useState } from "react";
 import { UnControlled as CodeMirror } from "react-codemirror2";
-import CM from "codemirror";
-import "codemirror/addon/hint/show-hint";
-import "codemirror/addon/hint/show-hint.css";
 
 import { Button, ToggleItems } from "../../../components";
 import { Form } from "../../../components/Form";
@@ -15,25 +15,32 @@ import { FF_UNSAVED_CHANGES, isFF } from "../../../utils/feature-flags";
 import { colorNames } from "./colors";
 import "./Config.scss";
 import { Preview } from "./Preview";
-import { DEFAULT_COLUMN, EMPTY_CONFIG, isEmptyConfig, Template } from "./Template";
+import {
+  DEFAULT_COLUMN,
+  EMPTY_CONFIG,
+  isEmptyConfig,
+  Template
+} from "./Template";
 import { TemplatesList } from "./TemplatesList";
 
+import { Checkbox } from "@humansignal/ui";
+import { toSnakeCase } from "strman";
 import "./codemirror.css";
 import "./config-hint";
 import tags from "./schema.json";
 import { UnsavedChanges } from "./UnsavedChanges";
-import { Checkbox } from "@humansignal/ui";
-import { toSnakeCase } from "strman";
 
 const wizardClass = cn("wizard");
 const configClass = cn("configure");
 
 const EmptyConfigPlaceholder = () => (
   <div className={configClass.elem("empty-config")}>
-    <p>Your labeling configuration is empty. It is required to label your data.</p>
     <p>
-      Start from one of our predefined templates or create your own config on the Code panel. The labeling config is
-      XML-based and you can{" "}
+      Your labeling configuration is empty. It is required to label your data.
+    </p>
+    <p>
+      Start from one of our predefined templates or create your own config on
+      the Code panel. The labeling config is XML-based and you can{" "}
       <a href="https://labelstud.io/tags/" target="_blank" rel="noreferrer">
         read about the available tags in our documentation
       </a>
@@ -46,13 +53,19 @@ const Label = ({ label, template, color }) => {
   const value = label.getAttribute("value");
 
   return (
-    <li className={configClass.elem("label").mod({ choice: label.tagName === "Choice" })}>
+    <li
+      className={configClass
+        .elem("label")
+        .mod({ choice: label.tagName === "Choice" })}
+    >
       <label style={{ background: color }}>
         <input
           type="color"
           className={configClass.elem("label-color")}
           value={colorNames[color] || color}
-          onChange={(e) => template.changeLabel(label, { background: e.target.value })}
+          onChange={e =>
+            template.changeLabel(label, { background: e.target.value })
+          }
         />
       </label>
       <span>{value}</span>
@@ -93,7 +106,7 @@ const ConfigureControl = ({ control, template }) => {
     template.addLabels(control, refLabels.current.value);
     refLabels.current.value = "";
   };
-  const onKeyPress = (e) => {
+  const onKeyPress = e => {
     if (e.key === "Enter" && e.ctrlKey) {
       e.preventDefault();
       onAddLabels();
@@ -105,17 +118,26 @@ const ConfigureControl = ({ control, template }) => {
       <form className={configClass.elem("add-labels")} action="">
         <h4>{tagname === "Choices" ? "Add choices" : "Add label names"}</h4>
         <span>Use new line as a separator to add multiple labels</span>
-        <textarea name="labels" id="" cols="50" rows="5" ref={refLabels} onKeyPress={onKeyPress} className="p-2 px-3" />
+        <textarea
+          name="labels"
+          id=""
+          cols="50"
+          rows="5"
+          ref={refLabels}
+          onKeyPress={onKeyPress}
+          className="p-2 px-3"
+        />
         <Button type="button" size="compact" onClick={onAddLabels}>
           Add
         </Button>
       </form>
       <div className={configClass.elem("current-labels")}>
         <h3>
-          {tagname === "Choices" ? "Choices" : "Labels"} ({control.children.length})
+          {tagname === "Choices" ? "Choices" : "Labels"} (
+          {control.children.length})
         </h3>
         <ul>
-          {Array.from(control.children).map((label) => (
+          {Array.from(control.children).map(label => (
             <Label
               label={label}
               template={template}
@@ -135,7 +157,7 @@ const ConfigureSettings = ({ template }) => {
   if (!settings) return null;
   const keys = Object.keys(settings);
 
-  const items = keys.map((key) => {
+  const items = keys.map(key => {
     const options = settings[key];
     const type = Array.isArray(options.type) ? Array : options.type;
     const $object = options.object;
@@ -146,7 +168,8 @@ const ConfigureSettings = ({ template }) => {
     let value = false;
 
     if (options.value) value = options.value($tag);
-    else if (typeof options.param === "string") value = $tag.getAttribute(options.param);
+    else if (typeof options.param === "string")
+      value = $tag.getAttribute(options.param);
     if (value === "true") value = true;
     if (value === "false") value = false;
     let onChange;
@@ -154,7 +177,7 @@ const ConfigureSettings = ({ template }) => {
 
     switch (type) {
       case Array:
-        onChange = (e) => {
+        onChange = e => {
           if (typeof options.param === "function") {
             options.param($tag, e.target.value);
           } else {
@@ -167,7 +190,7 @@ const ConfigureSettings = ({ template }) => {
             <label>
               {options.title}{" "}
               <select className="border" value={value} onChange={onChange}>
-                {options.type.map((option) => (
+                {options.type.map(option => (
                   <option key={option} value={option}>
                     {option}
                   </option>
@@ -177,11 +200,14 @@ const ConfigureSettings = ({ template }) => {
           </li>
         );
       case Boolean:
-        onChange = (e) => {
+        onChange = e => {
           if (typeof options.param === "function") {
             options.param($tag, e.target.checked);
           } else {
-            $object.setAttribute(options.param, e.target.checked ? "true" : "false");
+            $object.setAttribute(
+              options.param,
+              e.target.checked ? "true" : "false"
+            );
           }
           template.render();
         };
@@ -195,7 +221,7 @@ const ConfigureSettings = ({ template }) => {
       case String:
       case Number:
         size = options.type === Number ? 5 : undefined;
-        onChange = (e) => {
+        onChange = e => {
           if (typeof options.param === "function") {
             options.param($tag, e.target.value);
           } else {
@@ -206,7 +232,8 @@ const ConfigureSettings = ({ template }) => {
         return (
           <li key={key}>
             <label>
-              {options.title} <input type="text" onInput={onChange} value={value} size={size} />
+              {options.title}{" "}
+              <input type="text" onInput={onChange} value={value} size={size} />
             </label>
           </li>
         );
@@ -232,7 +259,9 @@ const ConfigureColumn = ({ template, obj, columns }) => {
   const value = obj.getAttribute(valueAttr)?.replace(/^\$/, "");
   // if there is a value set already and it's not in the columns
   // or data was not uploaded yet
-  const [isManual, setIsManual] = useState(!!value && !columns?.includes(value));
+  const [isManual, setIsManual] = useState(
+    !!value && !columns?.includes(value)
+  );
   // value is stored in state to make input conrollable
   // changes will be sent by Enter and blur
   const [newValue, setNewValue] = useState(`$${value}`);
@@ -240,14 +269,14 @@ const ConfigureColumn = ({ template, obj, columns }) => {
   // update local state when external value changes
   useEffect(() => setNewValue(`$${value}`), [value]);
 
-  const updateValue = (value) => {
+  const updateValue = value => {
     const newValue = value.replace(/^\$/, "");
 
     obj.setAttribute(valueAttr, `$${newValue}`);
     template.render();
   };
 
-  const selectValue = (e) => {
+  const selectValue = e => {
     const value = e.target.value;
 
     if (value === "-") {
@@ -261,7 +290,7 @@ const ConfigureColumn = ({ template, obj, columns }) => {
     updateValue(value);
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const newValue = e.target.value.replace(/^\$/, "");
 
     setNewValue(`$${newValue}`);
@@ -271,7 +300,7 @@ const ConfigureColumn = ({ template, obj, columns }) => {
     updateValue(newValue);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = e => {
     if (e.key === "Enter") {
       e.preventDefault();
       updateValue(e.target.value);
@@ -284,8 +313,12 @@ const ConfigureColumn = ({ template, obj, columns }) => {
       {template.objects > 1 && ` for ${obj.getAttribute("name")}`}
       {" from "}
       {columns?.length > 0 && columns[0] !== DEFAULT_COLUMN && "field "}
-      <select className="border" onChange={selectValue} value={isManual ? "-" : value}>
-        {columns?.map((column) => (
+      <select
+        className="border"
+        onChange={selectValue}
+        value={isManual ? "-" : value}
+      >
+        {columns?.map(column => (
           <option key={column} value={column}>
             {column === DEFAULT_COLUMN ? "<imported file>" : `$${column}`}
           </option>
@@ -293,7 +326,14 @@ const ConfigureColumn = ({ template, obj, columns }) => {
         {!columns?.length && <option value={value}>{"<imported file>"}</option>}
         <option value="-">{"<set manually>"}</option>
       </select>
-      {isManual && <input value={newValue} onChange={handleChange} onBlur={handleBlur} onKeyDown={handleKeyDown} />}
+      {isManual && (
+        <input
+          value={newValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+        />
+      )}
     </p>
   );
 };
@@ -304,17 +344,24 @@ const ConfigureColumns = ({ columns, template }) => {
   return (
     <div className={configClass.elem("object")}>
       <h4>Configure data</h4>
-      {template.objects.length > 1 && columns?.length > 0 && columns.length < template.objects.length && (
-        <p className={configClass.elem("object-error")}>This template requires more data then you have for now</p>
-      )}
+      {template.objects.length > 1 &&
+        columns?.length > 0 &&
+        columns.length < template.objects.length && (
+          <p className={configClass.elem("object-error")}>
+            This template requires more data then you have for now
+          </p>
+        )}
       {columns?.length === 0 && (
         <p className={configClass.elem("object-error")}>
-          To select which field(s) to label you need to upload the data. Alternatively, you can provide it using Code
-          mode.
+          To select which field(s) to label you need to upload the data.
+          Alternatively, you can provide it using Code mode.
         </p>
       )}
-      {template.objects.map((obj) => (
-        <ConfigureColumn key={obj.getAttribute("name")} {...{ obj, template, columns }} />
+      {template.objects.map(obj => (
+        <ConfigureColumn
+          key={obj.getAttribute("name")}
+          {...{ obj, template, columns }}
+        />
       ))}
     </div>
   );
@@ -331,9 +378,11 @@ const Configurator = ({
   onValidate,
   disableSaveButton,
   warning,
-  hasChanges,
+  hasChanges
 }) => {
-  const [configure, setConfigure] = React.useState(isEmptyConfig(config) ? "code" : "visual");
+  const [configure, setConfigure] = React.useState(
+    isEmptyConfig(config) ? "code" : "visual"
+  );
   const [visualLoaded, loadVisual] = React.useState(configure === "visual");
   const [waiting, setWaiting] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
@@ -353,7 +402,10 @@ const Configurator = ({
 
   React.useEffect(() => {
     // config may change during init, so wait for that, but for a very short time only
-    debounceTimer.current = window.setTimeout(() => setConfigToCheck(config), configToCheck ? 500 : 30);
+    debounceTimer.current = window.setTimeout(
+      () => setConfigToCheck(config),
+      configToCheck ? 500 : 30
+    );
     return () => window.clearTimeout(debounceTimer.current);
   }, [config]);
 
@@ -366,7 +418,7 @@ const Configurator = ({
       const validation = await api.callApi("validateConfig", {
         params: { pk: project.id },
         body: { label_config: configToCheck },
-        errorFilter: () => true,
+        errorFilter: () => true
       });
 
       if (validation?.error) {
@@ -381,7 +433,7 @@ const Configurator = ({
       const sample = await api.callApi("createSampleTask", {
         params: { pk: project.id },
         body: { label_config: configToCheck },
-        errorFilter: () => true,
+        errorFilter: () => true
       });
 
       setLoading(false);
@@ -400,24 +452,24 @@ const Configurator = ({
   // code should be reloaded on every render because of uncontrolled codemirror
   // visuals should be always rendered after first render
   // so load it on the first access, then just show/hide
-  const onSelect = (value) => {
+  const onSelect = value => {
     setConfigure(value);
     if (value === "visual") loadVisual(true);
   };
 
   const onChange = React.useCallback(
-    (config) => {
+    config => {
       try {
         setParserError(null);
         setTemplate(config);
       } catch (e) {
         setParserError({
           detail: "Parser error",
-          validation_errors: [e.message],
+          validation_errors: [e.message]
         });
       }
     },
-    [setTemplate],
+    [setTemplate]
   );
 
   const onSave = async () => {
@@ -449,7 +501,11 @@ const Configurator = ({
     return completeAfter(cm, () => {
       const token = cm.getTokenAt(cm.getCursor());
 
-      if (token.type === "string" && (!/['"]$/.test(token.string) || token.string.length === 1)) return false;
+      if (
+        token.type === "string" &&
+        (!/['"]$/.test(token.string) || token.string.length === 1)
+      )
+        return false;
 
       const inner = CM.innerMode(cm.getMode(), token.state).state;
 
@@ -460,11 +516,11 @@ const Configurator = ({
   const extra = (
     <p className={configClass.elem("tags-link")}>
       Configure the labeling interface with tags.
-      <br />
+      {/* <br />
       <a href="https://labelstud.io/tags/" target="_blank" rel="noreferrer">
         See all available tags
       </a>
-      .
+      . */}
     </p>
   );
 
@@ -473,14 +529,26 @@ const Configurator = ({
       <div className={configClass.elem("container")}>
         <h1>Labeling Interface{hasChanges ? " *" : ""}</h1>
         <header>
-          <Button type="button" data-leave={true} onClick={onBrowse} size="compact">
+          <Button
+            type="button"
+            data-leave={true}
+            onClick={onBrowse}
+            size="compact"
+          >
             Browse Templates
           </Button>
-          <ToggleItems items={{ code: "Code", visual: "Visual" }} active={configure} onSelect={onSelect} />
+          <ToggleItems
+            items={{ code: "Code", visual: "Visual" }}
+            active={configure}
+            onSelect={onSelect}
+          />
         </header>
         <div className={configClass.elem("editor")}>
           {configure === "code" && (
-            <div className={configClass.elem("code")} style={{ display: configure === "code" ? undefined : "none" }}>
+            <div
+              className={configClass.elem("code")}
+              style={{ display: configure === "code" ? undefined : "none" }}
+            >
               <CodeMirror
                 name="code"
                 id="edit_code"
@@ -498,9 +566,9 @@ const Configurator = ({
                     // "'/'": completeIfAfterLt,
                     "' '": completeIfInTag,
                     "'='": completeIfInTag,
-                    "Ctrl-Space": "autocomplete",
+                    "Ctrl-Space": "autocomplete"
                   },
-                  hintOptions: { schemaInfo: tags },
+                  hintOptions: { schemaInfo: tags }
                 }}
                 // don't close modal with Escape while editing config
                 onKeyDown={(editor, e) => {
@@ -516,16 +584,28 @@ const Configurator = ({
               style={{ display: configure === "visual" ? undefined : "none" }}
             >
               {isEmptyConfig(config) && <EmptyConfigPlaceholder />}
-              <ConfigureColumns columns={columns} project={project} template={template} />
-              {template.controls.map((control) => (
-                <ConfigureControl control={control} template={template} key={control.getAttribute("name")} />
+              <ConfigureColumns
+                columns={columns}
+                project={project}
+                template={template}
+              />
+              {template.controls.map(control => (
+                <ConfigureControl
+                  control={control}
+                  template={template}
+                  key={control.getAttribute("name")}
+                />
               ))}
               <ConfigureSettings template={template} />
             </div>
           )}
         </div>
         {disableSaveButton !== true && onSaveClick && (
-          <Form.Actions size="small" extra={configure === "code" && extra} valid>
+          <Form.Actions
+            size="small"
+            extra={configure === "code" && extra}
+            valid
+          >
             {saved && (
               <Block name="form-indicator">
                 <Elem tag="span" mod={{ type: "success" }} name="item">
@@ -533,10 +613,18 @@ const Configurator = ({
                 </Elem>
               </Block>
             )}
-            <Button look="primary" size="compact" style={{ width: 120 }} onClick={onSave} waiting={waiting}>
+            <Button
+              look="primary"
+              size="compact"
+              style={{ width: 120 }}
+              onClick={onSave}
+              waiting={waiting}
+            >
               {waiting ? "Saving..." : "Save"}
             </Button>
-            {isFF(FF_UNSAVED_CHANGES) && <UnsavedChanges hasChanges={hasChanges} onSave={onSave} />}
+            {isFF(FF_UNSAVED_CHANGES) && (
+              <UnsavedChanges hasChanges={hasChanges} onSave={onSave} />
+            )}
           </Form.Actions>
         )}
       </div>
@@ -560,7 +648,7 @@ export const ConfigPage = ({
   onValidate,
   disableSaveButton,
   show = true,
-  hasChanges,
+  hasChanges
 }) => {
   const [config, _setConfig] = React.useState("");
   const [mode, setMode] = React.useState("list"); // view | list
@@ -570,30 +658,30 @@ export const ConfigPage = ({
   const api = useAPI();
 
   const setSelectedGroup = React.useCallback(
-    (group) => {
+    group => {
       _setSelectedGroup(group);
       __lsa(`labeling_setup.list.${toSnakeCase(group)}`);
     },
-    [_setSelectedGroup],
+    [_setSelectedGroup]
   );
 
   const setConfig = React.useCallback(
-    (config) => {
+    config => {
       _setConfig(config);
       onUpdate(config);
     },
-    [_setConfig, onUpdate],
+    [_setConfig, onUpdate]
   );
 
   const setTemplate = React.useCallback(
-    (config) => {
+    config => {
       const tpl = new Template({ config });
 
       tpl.onConfigUpdate = setConfig;
       setConfig(config);
       setCurrentTemplate(tpl);
     },
-    [setConfig, setCurrentTemplate],
+    [setConfig, setCurrentTemplate]
   );
 
   const [columns, setColumns] = React.useState();
@@ -610,7 +698,7 @@ export const ConfigPage = ({
         const res = await api.callApi("dataSummary", {
           params: { pk: project.id },
           // 404 is ok, and errors here don't matter
-          errorFilter: () => true,
+          errorFilter: () => true
         });
 
         if (res?.common_data_columns) {
@@ -621,7 +709,7 @@ export const ConfigPage = ({
     };
   }, [columns, project]);
 
-  const onSelectRecipe = React.useCallback((recipe) => {
+  const onSelectRecipe = React.useCallback(recipe => {
     if (!recipe) {
       setSelectedRecipe(null);
       setMode("list");
@@ -630,7 +718,11 @@ export const ConfigPage = ({
       setTemplate(recipe.config);
       setSelectedRecipe(recipe);
       setMode("view");
-      __lsa(`labeling_setup.view.${toSnakeCase(recipe.group)}.${toSnakeCase(recipe.title)}`);
+      __lsa(
+        `labeling_setup.view.${toSnakeCase(recipe.group)}.${toSnakeCase(
+          recipe.title
+        )}`
+      );
     }
   });
 

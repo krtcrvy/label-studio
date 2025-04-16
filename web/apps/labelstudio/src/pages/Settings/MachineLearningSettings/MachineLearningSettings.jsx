@@ -1,19 +1,19 @@
+import { IconModels } from "@humansignal/icons";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Button, Spinner } from "../../../components";
 import { Description } from "../../../components/Description/Description";
+import { EmptyState } from "../../../components/EmptyState/EmptyState";
 import { Form, Label, Toggle } from "../../../components/Form";
 import { modal } from "../../../components/Modal/Modal";
-import { EmptyState } from "../../../components/EmptyState/EmptyState";
-import { IconModels } from "@humansignal/icons";
 import { useAPI } from "../../../providers/ApiProvider";
 import { ProjectContext } from "../../../providers/ProjectProvider";
-import { MachineLearningList } from "./MachineLearningList";
-import { CustomBackendForm } from "./Forms";
-import { TestRequest } from "./TestRequest";
-import { StartModelTraining } from "./StartModelTraining";
 import { Block, Elem } from "../../../utils/bem";
+import { CustomBackendForm } from "./Forms";
+import { MachineLearningList } from "./MachineLearningList";
 import "./MachineLearningSettings.scss";
+import { StartModelTraining } from "./StartModelTraining";
+import { TestRequest } from "./TestRequest";
 
 export const MachineLearningSettings = () => {
   const api = useAPI();
@@ -27,8 +27,8 @@ export const MachineLearningSettings = () => {
     const models = await api.callApi("mlBackends", {
       params: {
         project: project.id,
-        include_static: true,
-      },
+        include_static: true
+      }
     });
 
     if (models) setBackends(models);
@@ -37,35 +37,35 @@ export const MachineLearningSettings = () => {
   }, [project, setBackends]);
 
   const startTrainingModal = useCallback(
-    (backend) => {
+    backend => {
       const modalProps = {
         title: "Start Model Training",
         style: { width: 760 },
         closeOnClickOutside: true,
-        body: <StartModelTraining backend={backend} />,
+        body: <StartModelTraining backend={backend} />
       };
 
       modal(modalProps);
     },
-    [project],
+    [project]
   );
 
   const showRequestModal = useCallback(
-    (backend) => {
+    backend => {
       const modalProps = {
         title: "Test Request",
         style: { width: 760 },
         closeOnClickOutside: true,
-        body: <TestRequest backend={backend} />,
+        body: <TestRequest backend={backend} />
       };
 
       modal(modalProps);
     },
-    [project],
+    [project]
   );
 
   const showMLFormModal = useCallback(
-    (backend) => {
+    backend => {
       const action = backend ? "updateMLBackend" : "addMLBackend";
       const modalProps = {
         title: `${backend ? "Edit" : "Connect"} Model`,
@@ -81,12 +81,12 @@ export const MachineLearningSettings = () => {
               modalRef.close();
             }}
           />
-        ),
+        )
       };
 
       const modalRef = modal(modalProps);
     },
-    [project, fetchBackends],
+    [project, fetchBackends]
   );
 
   useEffect(() => {
@@ -109,21 +109,21 @@ export const MachineLearningSettings = () => {
                 Connect Model
               </Button>
             }
-            footer={
-              <div>
-                Need help?
-                <br />
-                <a href="https://labelstud.io/guide/ml" target="_blank" rel="noreferrer">
-                  Learn more about connecting models in our docs
-                </a>
-              </div>
-            }
+            // footer={
+            //   <div>
+            //     Need help?
+            //     <br />
+            //     <a href="https://labelstud.io/guide/ml" target="_blank" rel="noreferrer">
+            //       Learn more about connecting models in our docs
+            //     </a>
+            //   </div>
+            // }
           />
         )}
         <MachineLearningList
-          onEdit={(backend) => showMLFormModal(backend)}
-          onTestRequest={(backend) => showRequestModal(backend)}
-          onStartTraining={(backend) => startTrainingModal(backend)}
+          onEdit={backend => showMLFormModal(backend)}
+          onTestRequest={backend => showRequestModal(backend)}
+          onStartTraining={backend => startTrainingModal(backend)}
           fetchBackends={fetchBackends}
           backends={backends}
         />
@@ -131,17 +131,19 @@ export const MachineLearningSettings = () => {
         {backends.length > 0 && (
           <>
             <Description>
-              A connected model has been detected! If you wish to fetch predictions from this model, please follow these
-              steps:
+              A connected model has been detected! If you wish to fetch
+              predictions from this model, please follow these steps:
               <br />
               <br />
               1. Navigate to the <i>Data Manager</i>.<br />
               2. Select the desired tasks.
               <br />
-              3. Click on <i>Retrieve predictions</i> from the <i>Actions</i> menu.
+              3. Click on <i>Retrieve predictions</i> from the <i>Actions</i>{" "}
+              menu.
             </Description>
             <Description>
-              If you want to use the model predictions for prelabeling, please configure this in the{" "}
+              If you want to use the model predictions for prelabeling, please
+              configure this in the{" "}
               <NavLink to="annotation">Annotation settings</NavLink>.
             </Description>
           </>
