@@ -1,12 +1,12 @@
 .link {
-  color: #1890ff;
+  color: var(--grape_500);
   cursor: pointer;
 
   &:hover {
-    color: #40a9ff;
+    color: var(--grape_100);
   }
 
   &:focus {
-    color: #1890ff;
+    color: var(--grape_500);
   }
 }

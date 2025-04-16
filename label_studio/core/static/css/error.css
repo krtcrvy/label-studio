@@ -1,28 +1,90 @@
 /* Compiled from App.styl */
+/* Compiled from App.styl */
 .ls-global-error {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 15vh;
+  padding-top: 10vh;
+  text-align: center;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
 }
+
 .ls-global-error__heidi {
-  width: 812px;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  max-height: 40vh;
 }
 
 .ls-global-error h1 {
-  font-size: 48px;
+  font-size: 2.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .ls-global-error h2 {
-  font-size: 16px;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .ls-global-error__actions {
   display: flex;
-  gap: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
 .ls-global-error__actions > * {
   line-height: 1em;
+}
+
+/* Compiled from Button.style */
+body > .ls-global-error button,
+body > .ls-global-error .button {
+  min-height: 40px;
+  min-width: 120px;
+  width: auto;
+  border: none;
+  cursor: pointer;
+  padding: 0 16px;
+  display: inline-flex;
+  background-color: #fff;
+  align-items: center;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  justify-content: center;
+  color: #333;
+  box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.1),
+    inset 0px 0px 0px 1px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+}
+
+/* Add media queries for different screen sizes */
+@media (max-width: 768px) {
+  .ls-global-error h1 {
+    font-size: 1.8rem;
+  }
+  
+  .ls-global-error h2 {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ls-global-error__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  body > .ls-global-error button,
+  body > .ls-global-error .button {
+    width: 100%;
+  }
 }
 
 /* Compiled from Button.style */

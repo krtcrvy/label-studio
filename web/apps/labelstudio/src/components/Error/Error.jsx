@@ -1,6 +1,6 @@
+import { IconSlack } from "@humansignal/icons";
 import { Fragment, useCallback, useMemo, useState } from "react";
 import sanitizeHtml from "sanitize-html";
-import { IconSlack } from "@humansignal/icons";
 import { Block, Elem } from "../../utils/bem";
 import { absoluteURL, copyText } from "../../utils/helpers";
 import { Button } from "../Button/Button";
@@ -38,9 +38,8 @@ export const ErrorWrapper = ({
         <Elem
           tag="img"
           name="heidi"
-          src={absoluteURL("/static/images/opossum_broken.svg")}
-          height="111"
-          alt="Heidi's down"
+          src={absoluteURL("/static/icons/500.svg")}
+          alt="500 Image"
         />
       )}
 
