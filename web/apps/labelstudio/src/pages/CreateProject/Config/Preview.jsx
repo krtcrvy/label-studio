@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "../../../components";
+import { API_CONFIG } from "../../../config/ApiConfig";
+import { useAPI } from "../../../providers/ApiProvider";
 import { cn } from "../../../utils/bem";
 import "./Config.scss";
 import { EMPTY_CONFIG } from "./Template";
-import { API_CONFIG } from "../../../config/ApiConfig";
-import { useAPI } from "../../../providers/ApiProvider";
 
 const configClass = cn("configure");
 
@@ -152,7 +152,7 @@ export const Preview = ({ config, data, error, loading, project }) => {
           ))}
         </div>
       )}
-      {!data && loading && <Spinner style={{ width: "100%", height: "50vh" }} />}
+      {!data && loading && <Spinner />}
       <div id="label-studio" className={configClass.elem("preview-ui")} ref={rootRef} />
     </div>
   );
