@@ -1,4 +1,5 @@
 {% extends 'users/new-ui/user_base.html' %}
+{% load static %}
 
 {% block content %}
   {{ block.super }}
@@ -13,6 +14,8 @@
 {% endblock %}
 
 {% block user_content %}
+  <img src="{{ settings.HOSTNAME }}{% static 'icons/logo.svg' %}" alt="" style="width: 100%; max-width: 80px; height: auto;">
+
   <div class="form-wrapper">
     <h2>Log in</h2>
     <form id="login-form" action="{% url 'user-login' %}?next={{ next }}" method="post">
