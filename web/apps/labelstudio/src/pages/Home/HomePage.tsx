@@ -107,7 +107,7 @@ export const HomePage: Page = () => {
               data && data?.count > 0 ? (
                 <>
                   Recent Projects{" "}
-                  <a href="/projects" className="text-lg font-normal text-[#10a870] hover:underline hover:text-[#0D8F60]">
+                  <a href="/projects" className="text-lg font-normal text-primary-content hover:underline hover:text-primary-content-hover">
                     View All
                   </a>
                 </>
@@ -131,7 +131,7 @@ export const HomePage: Page = () => {
                 </div>
                 <Heading size={2}>Create your first project</Heading>
                 <Sub>Import your data and set up the labeling interface to start annotating</Sub>
-                <Button className="mt-4" onClick={() => setCreationDialogOpen(true)}>
+                <Button className="mt-4" variant='lsOutline' onClick={() => setCreationDialogOpen(true)}>
                   Create Project
                 </Button>
               </div>
