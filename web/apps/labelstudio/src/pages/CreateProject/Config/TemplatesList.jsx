@@ -103,13 +103,18 @@ export const TemplatesList = ({
           Custom template
         </button>
       </aside>
-      <main>
-        {!templates && <Spinner style={{ width: "100%", height: 200 }} />}
-        <TemplatesInGroup
-          templates={templates || []}
-          group={selected}
-          onSelectRecipe={onSelectRecipe}
-        />
+      <main className={listClass.elem("main")}>
+        {!templates ? (
+          <div className={listClass.elem("loading")}>
+            <Spinner />
+          </div>
+        ) : (
+          <TemplatesInGroup
+            templates={templates}
+            group={selected}
+            onSelectRecipe={onSelectRecipe}
+          />
+        )}
       </main>
       {/* <footer className="flex items-center justify-center gap-1">
         <IconInfo className={listClass.elem("info-icon")} width="20" height="20" />

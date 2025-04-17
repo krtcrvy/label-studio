@@ -34,7 +34,7 @@ export const Preview = ({ config, data, error, loading, project }) => {
       id: 1,
       annotations: [],
       predictions: [],
-      data,
+      data
     };
   }, [data]);
 
@@ -53,7 +53,10 @@ export const Preview = ({ config, data, error, loading, project }) => {
 
     const fileuri = btoa(url);
 
-    return api.api.createUrl(API_CONFIG.endpoints.presignUrlForProject, { projectId, fileuri }).url;
+    return api.api.createUrl(API_CONFIG.endpoints.presignUrlForProject, {
+      projectId,
+      fileuri
+    }).url;
   };
 
   const currentConfig = useMemo(() => {
@@ -87,7 +90,7 @@ export const Preview = ({ config, data, error, loading, project }) => {
 
           // and even then we need to wait a little even after the store is initialized
           setTimeout(initAnnotation);
-        },
+        }
       });
 
       lsf.current.on("presignUrlForProject", onPresignUrlForProject);
@@ -114,7 +117,7 @@ export const Preview = ({ config, data, error, loading, project }) => {
         store.initializeStore(currentTask);
 
         const c = store.annotationStore.addAnnotation({
-          userGenerate: true,
+          userGenerate: true
         });
 
         store.annotationStore.selectAnnotation(c.id);
@@ -141,19 +144,27 @@ export const Preview = ({ config, data, error, loading, project }) => {
           <h2>
             {error.detail} {error.id}
           </h2>
-          {error.validation_errors?.non_field_errors?.map?.((err) => (
+          {error.validation_errors?.non_field_errors?.map?.(err => (
             <p key={err}>{err}</p>
           ))}
-          {error.validation_errors?.label_config?.map?.((err) => (
+          {error.validation_errors?.label_config?.map?.(err => (
             <p key={err}>{err}</p>
           ))}
-          {error.validation_errors?.map?.((err) => (
+          {error.validation_errors?.map?.(err => (
             <p key={err}>{err}</p>
           ))}
         </div>
       )}
-      {!data && loading && <Spinner />}
-      <div id="label-studio" className={configClass.elem("preview-ui")} ref={rootRef} />
+      {!data && loading && (
+        <div className={configClass.elem("preview-loading")}>
+          <Spinner />
+        </div>
+      )}
+      <div
+        id="label-studio"
+        className={configClass.elem("preview-ui")}
+        ref={rootRef}
+      />
     </div>
   );
 };
